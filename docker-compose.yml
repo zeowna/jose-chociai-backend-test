@@ -1,0 +1,14 @@
+version: '3'
+services:
+  db:
+    image: mongo:6
+    restart: always
+  api:
+    build: .
+    volumes:
+      - ./:/app
+    ports:
+      - '3000:3000'
+    command: 'sh -c "yarn && yarn nest start --watch api"'
+    depends_on:
+      - db
