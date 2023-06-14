@@ -1,73 +1,61 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Tractian - Back End Software Engineer - José Lucas Chociai
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Context
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Our users, Emerson and Roberta, are maintenance managers at Industria Freios Supremos (auto parts manufacturer), and
+they have **2 units** and **10 assets** (machines) in total. They would like to be able to register and view both the
+units separately, as well as have an overview that condenses the data from the two units.
 
-## Description
+## **Challenge**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+<aside>
+📌 **Build a CRUD where the user can register companies, units, assets and users.**
 
-## Installation
+</aside>
 
-```bash
-$ npm install
-```
+## **Important:**
+
+- Each asset must have an image, name, description, model, owner, status and health level;
+- Each asset is part of a unit;
+- Each unit is part of a company;
+- Every user is part of a company;
+- There are three types of status: Running, Alerting, Stopped;
+- Health level needs to be between 0% to 100%.
+
+## **Mandatory:**
+
+- Database (MongoDB)
+- Engine (NodeJS w/ Express)
+- Typescript
+
+## **Differentials:**
+
+- Design Standard (Clean Code/Clean Architecture).
+
+💡 Please, be able to abstract well the presented problem and define it yourself which data you consider most important.
+Think with the user's head: What does an industry person need to know about their assets?
+In addition to the required libraries, you can use anything else and at the end publish your code on GitHub
+and [deploy](https://dev.to/yuribenjamin/how-to-deploy-react-app-in-github-pages-2a1f) the application
+(Heroku suggestion) because we want to see it online, then send us the links. 🔥
 
 ## Running the app
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
+Docker and Docker Compose are required to run the App
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ docker compose up
 ```
 
-## Support
+## Technologies used:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Docker Compose
+- Database (MongoDB)
+- Nestjs 9 and Typescript 5.0.0
+- Mongoose 7.2.4
+- Class Validator/Class Transformer
 
-## Stay in touch
+Although it demands ExpressJS, I decided to use Nest because it's what I've been working lately.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Nest provides a Monorepo mode, so I decided to use it and make easier to organize libs and apps.
+Other thing was the use of @nestjs/* libs, in order to keep things the "Nest" way as possible for this test,
+Hope you'll see some nice abstractions along the way.
