@@ -10,13 +10,13 @@
   "monorepo": true,
   "root": "apps/jose-chociai-backend-test",
   "projects": {
-    "api": {
+    "users": {
       "type": "application",
-      "root": "apps/api",
+      "root": "apps/users",
       "entryFile": "main",
-      "sourceRoot": "apps/api/src",
+      "sourceRoot": "apps/users/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/api/tsconfig.app.json"
+        "tsConfigPath": "apps/users/tsconfig.app.json"
       }
     },
     "common": {
@@ -26,6 +26,78 @@
       "sourceRoot": "libs/common/src",
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "companies": {
+      "type": "application",
+      "root": "apps/companies",
+      "entryFile": "main",
+      "sourceRoot": "apps/companies/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/companies/tsconfig.app.json"
+      }
+    },
+    "kafka": {
+      "type": "library",
+      "root": "libs/kafka",
+      "entryFile": "index",
+      "sourceRoot": "libs/kafka/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/kafka/tsconfig.lib.json"
+      }
+    },
+    "entities-definition": {
+      "type": "library",
+      "root": "libs/entities-definition",
+      "entryFile": "index",
+      "sourceRoot": "libs/entities-definition/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/entities-definition/tsconfig.lib.json"
+      }
+    },
+    "units": {
+      "type": "application",
+      "root": "apps/units",
+      "entryFile": "main",
+      "sourceRoot": "apps/units/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/units/tsconfig.app.json"
+      }
+    },
+    "auth": {
+      "type": "library",
+      "root": "libs/auth",
+      "entryFile": "index",
+      "sourceRoot": "libs/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/auth/tsconfig.lib.json"
+      }
+    },
+    "assets": {
+      "type": "application",
+      "root": "apps/assets",
+      "entryFile": "main",
+      "sourceRoot": "apps/assets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/assets/tsconfig.app.json"
+      }
+    },
+    "mongoose": {
+      "type": "library",
+      "root": "libs/mongoose",
+      "entryFile": "index",
+      "sourceRoot": "libs/mongoose/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/mongoose/tsconfig.lib.json"
+      }
+    },
+    "alerts": {
+      "type": "application",
+      "root": "apps/alerts",
+      "entryFile": "main",
+      "sourceRoot": "apps/alerts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/alerts/tsconfig.app.json"
       }
     }
   }

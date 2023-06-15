@@ -15,4 +15,6 @@ export interface ServiceInterface<
   update(id: any, updateEntityDto: UpdateEntityDto): Promise<T>;
 
   remove(id: any): Promise<T>;
+
+  createOrUpdate(createEntityDto: CreateEntityDto): Promise<T>;
 }

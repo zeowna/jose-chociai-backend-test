@@ -1,0 +1,25 @@
+GET http://localhost:8080/units?sort={ "createdAt":  1 }
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExNDlmYjAwMDk0YTM0NWZiYmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ4ZjY5ZGZiZWMzOWNjZjkzZTNmMjkwIiwiaWF0IjoxNjg3MTIwNDE4fQ.KnVfMttuMIIgLl-N9YLaV3IX2emtexIt0sy9nSlC7sc
+
+
+###
+
+POST http://localhost:8080/units
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExNDlmYjAwMDk0YTM0NWZiYmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ4ZjY5ZGZiZWMzOWNjZjkzZTNmMjkwIiwiaWF0IjoxNjg3MTIwNDE4fQ.KnVfMttuMIIgLl-N9YLaV3IX2emtexIt0sy9nSlC7sc
+
+{
+  "name": "Unidade Teste 1"
+}
+
+
+###
+
+PATCH http://localhost:8080/units/648f6a3a04e91aeb909e8c4d
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExNDlmYjAwMDk0YTM0NWZiYmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ4ZjY5ZGZiZWMzOWNjZjkzZTNmMjkwIiwiaWF0IjoxNjg3MTIwNDE4fQ.KnVfMttuMIIgLl-N9YLaV3IX2emtexIt0sy9nSlC7sc
+
+{
+  "name": "Unidade Teste 1"
+}

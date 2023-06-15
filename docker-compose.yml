@@ -1,14 +1,102 @@
 version: '3'
 services:
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./nginx/config:/etc/nginx/conf.d/
+    ports:
+      - "8080:80"
+    restart: always
+    depends_on:
+      - users
+      - companies
+      - units
+      - assets
+      - alerts
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - '9092:9092'
+    restart: always
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT
+
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:6.0.1
+    hostname: control-center
+    depends_on:
+      - kafka
+    ports:
+      - '9021:9021'
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka:9092'
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      PORT: 9021
+
   db:
     image: mongo:6
     restart: always
-  api:
+  users:
     build: .
     volumes:
       - ./:/app
     ports:
       - '3000:3000'
-    command: 'sh -c "yarn && yarn nest start --watch api"'
+    command: 'sh -c "yarn && yarn nest start --watch users"'
     depends_on:
       - db
+      - kafka
+  companies:
+    build: .
+    volumes:
+      - ./:/app
+    ports:
+      - '3001:3000'
+    command: 'sh -c "yarn && yarn nest start --watch companies"'
+    depends_on:
+      - db
+      - kafka
+  units:
+    build: .
+    volumes:
+      - ./:/app
+    ports:
+      - '3002:3000'
+    command: 'sh -c "yarn && yarn nest start --watch units"'
+    depends_on:
+      - db
+      - kafka
+  assets:
+    build: .
+    volumes:
+      - ./:/app
+    ports:
+      - '3003:3000'
+    command: 'sh -c "yarn && yarn nest start --watch assets"'
+    depends_on:
+      - db
+      - kafka
+  alerts:
+    build: .
+    volumes:
+      - ./:/app
+    ports:
+      - '3004:3000'
+    command: 'sh -c "yarn && yarn nest start --watch alerts"'
+    depends_on:
+      - kafka

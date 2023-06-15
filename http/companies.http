@@ -1,0 +1,32 @@
+GET http://localhost:8080/companies
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/companies
+Content-Type: application/json
+
+{
+  "name": "Freios Rivais",
+  "cnpj": "86886567000122"
+}
+
+###
+
+POST http://localhost:8080/companies
+Content-Type: application/json
+
+{
+  "name": "Freios Rivais",
+  "cnpj": "70538812000170"
+}
+
+###
+
+PATCH http://localhost:8080/companies/648f69dfbec39ccf93e3f290
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExNDlmYjAwMDk0YTM0NWZiYmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ4ZjY5ZGZiZWMzOWNjZjkzZTNmMjkwIiwiaWF0IjoxNjg3MTM3NzM3fQ.GeIAvQivC6gLoH2oxL2IOL8YpM_hUPsol_NrQrfG9oY
+
+{
+  "name": "Freios Supremos"
+}

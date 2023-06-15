@@ -1,0 +1,41 @@
+GET http://localhost:8080/users
+Content-Type: application/json
+
+###
+
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "José Chociai",
+  "cpf": "58371614063",
+  "email": "joselucaschociai@gmail.com",
+  "password": "123",
+  "companyId": "648f69dfbec39ccf93e3f290"
+}
+
+<> 2023-06-13T003836.400.json
+<> 2023-06-13T003655.500.json
+<> 2023-06-13T003601.201.json
+<> 2023-06-13T003525.400.json
+<> 2023-06-13T003339.500.json
+<> 2023-06-13T003147.500.json
+
+###
+POST http://localhost:3000/auth
+Content-Type: application/json
+
+{
+  "email": "joselucaschociai@gmail.com",
+  "password": "123"
+}
+
+<> 2023-06-13T004022.201.json
+
+###
+PATCH http://localhost:3000/users/648a576424ec7d428db07a17
+Content-Type: application/json
+
+{
+  "companyId": ""
+}

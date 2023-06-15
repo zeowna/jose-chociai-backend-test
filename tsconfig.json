@@ -25,10 +25,30 @@
         "libs/common/src/*"
       ],
       "@zeowna/auth": [
+        "libs/auth/src",
         "libs/auth/src"
       ],
       "@zeowna/auth/*": [
+        "libs/auth/src/*",
         "libs/auth/src/*"
+      ],
+      "@zeowna/kafka": [
+        "libs/kafka/src"
+      ],
+      "@zeowna/kafka/*": [
+        "libs/kafka/src/*"
+      ],
+      "@zeowna/entities-definition": [
+        "libs/entities-definition/src"
+      ],
+      "@zeowna/entities-definition/*": [
+        "libs/entities-definition/src/*"
+      ],
+      "@zeowna/mongoose": [
+        "libs/mongoose/src"
+      ],
+      "@zeowna/mongoose/*": [
+        "libs/mongoose/src/*"
       ]
     }
   }

@@ -1,5 +1,6 @@
 import {
   AbstractEntity,
+  ID,
   RepositoryInterface,
   ServiceInterface,
   SortParams,
@@ -8,7 +9,7 @@ import { NotFoundException } from '@nestjs/common';
 
 export abstract class AbstractService<
   T extends AbstractEntity,
-  CreateEntityDto = any,
+  CreateEntityDto = T,
   UpdateEntityDto = CreateEntityDto,
 > implements ServiceInterface<T, CreateEntityDto, UpdateEntityDto>
 {
@@ -42,8 +43,12 @@ export abstract class AbstractService<
     );
   }
 
-  async remove(id: any) {
+  async remove(id: ID) {
     const existing = await this.findById(id);
     return this.repositoryImpl.remove((existing as AbstractEntity).id);
+  }
+
+  async createOrUpdate(createEntityDto: CreateEntityDto) {
+    return this.repositoryImpl.createOrUpdate(createEntityDto as any);
   }
 }
