@@ -20,4 +20,11 @@ export abstract class AbstractMongooseEntity extends AbstractEntity {
   @ApiProperty()
   @Prop()
   updatedAt: Date;
+
+  present(): this {
+    return {
+      ...super.present(),
+      _id: undefined,
+    };
+  }
 }

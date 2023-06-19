@@ -1,4 +1,4 @@
-import { RepositoryInterface, SortParams } from '@zeowna/common';
+import { ID, RepositoryInterface, SortParams } from '@zeowna/common';
 import { Injectable } from '@nestjs/common';
 import { generateMockedEntityFunction } from '@zeowna/common/entities/generate-mocked-entity.function';
 import { MockedEntity } from '@zeowna/common/entities/mocked.entity';
@@ -13,7 +13,7 @@ export class MockedRepository implements RepositoryInterface<MockedEntity> {
     return this.data;
   }
 
-  async findById(id: string) {
+  async findById(id: ID) {
     return this.data.find((item) => item.id === id);
   }
 
@@ -23,14 +23,14 @@ export class MockedRepository implements RepositoryInterface<MockedEntity> {
     return entity;
   }
 
-  async update(id: string, entity: Partial<MockedEntity>) {
+  async update(id: ID, entity: Partial<MockedEntity>) {
     const existing = await this.findById(id);
 
     if (!existing) {
       return null;
     }
 
-    return { ...existing, ...entity };
+    return new MockedEntity({ ...existing, ...entity });
   }
 
   async remove(id: string) {

@@ -6,5 +6,6 @@ export interface PlainCompanyUnitInterface extends PlainEntityInterface {
 
 export interface PlainCompanyInterface extends PlainEntityInterface {
   name: string;
-  units: PlainCompanyUnitInterface[];
+  cnpj: string;
+  units?: PlainCompanyUnitInterface[];
 }

@@ -10,9 +10,13 @@ export abstract class AbstractEntity {
   @ApiProperty()
   updatedAt: Date;
 
-  constructor(props: AbstractEntity) {
+  constructor(props: Omit<AbstractEntity, 'present'>) {
     this.id = props.id;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
+  }
+
+  present() {
+    return this;
   }
 }
