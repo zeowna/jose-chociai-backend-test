@@ -38,6 +38,10 @@ export class AssetsMongooseRepository extends AbstractMongooseRepository<Asset> 
       .lean()
       .exec();
 
+    if (!found) {
+      return null;
+    }
+
     return new Asset(found as AssetDocument);
   }
 
