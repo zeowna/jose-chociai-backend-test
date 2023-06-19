@@ -65,6 +65,14 @@ export class Asset extends AbstractMongooseEntity {
    */
   @Prop()
   image?: string;
+
+  present(): this {
+    return {
+      ...super.present(),
+      owner: this?.owner?.present(),
+      unit: this?.unit?.present(),
+    };
+  }
 }
 
 export const AssetSchema = SchemaFactory.createForClass(Asset);

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { UserCompaniesService } from '../companies/user-companies.service';
 import { KafkaContext } from '@nestjs/microservices';
@@ -20,16 +20,24 @@ export class UsersConsumersService {
     context: KafkaContext,
   ) {
     console.log(context.getTopic(), company);
-    await this.companiesService.createOrUpdate(
-      new UserCompany(company as unknown as UserCompanyDocument),
-    );
+    try {
+      await this.companiesService.createOrUpdate(
+        new UserCompany(company as unknown as UserCompanyDocument),
+      );
+    } catch (err) {
+      Logger.error(err);
+    }
   }
 
   async companyUpdatedConsumer(
     company: PlainCompanyInterface,
     context: KafkaContext,
   ) {
-    await this.companyCreatedConsumer(company, context);
-    await this.usersService.updateUserCompany(company);
+    try {
+      await this.companyCreatedConsumer(company, context);
+      await this.usersService.updateUserCompany(company);
+    } catch (err) {
+      Logger.error(err);
+    }
   }
 }

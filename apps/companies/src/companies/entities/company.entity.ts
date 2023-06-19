@@ -28,6 +28,13 @@ export class Company extends AbstractMongooseEntity {
 
   @Prop({ type: [CompanyUnitSchema] })
   units?: CompanyUnit[];
+
+  present(): this {
+    return {
+      ...super.present(),
+      units: this?.units?.map((unit) => unit.present()),
+    };
+  }
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

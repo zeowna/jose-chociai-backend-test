@@ -22,6 +22,10 @@ export class Unit extends AbstractMongooseEntity {
 
   @Prop({ type: UnitCompanySchema })
   company: Partial<UnitCompany>;
+
+  present(): this {
+    return { ...super.present(), company: this?.company?.present() };
+  }
 }
 
 export const UnitSchema = SchemaFactory.createForClass(Unit);

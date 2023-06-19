@@ -26,7 +26,10 @@ export class CompaniesService extends AbstractService<
     await this.kafkaProducer.send({
       topic: TopicsEnum.CompanyCreated,
       messages: [
-        { key: TopicsEnum.CompanyCreated, value: JSON.stringify(created) },
+        {
+          key: TopicsEnum.CompanyCreated,
+          value: JSON.stringify(created.present()),
+        },
       ],
     });
 
@@ -39,7 +42,10 @@ export class CompaniesService extends AbstractService<
     await this.kafkaProducer.send({
       topic: TopicsEnum.CompanyUpdated,
       messages: [
-        { key: TopicsEnum.CompanyUpdated, value: JSON.stringify(updated) },
+        {
+          key: TopicsEnum.CompanyUpdated,
+          value: JSON.stringify(updated.present()),
+        },
       ],
     });
 

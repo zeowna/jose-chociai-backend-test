@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PlainUnitInterface } from '@zeowna/entities-definition';
 import { CompanyUnitsService } from '../units/company-units.service';
 import { KafkaContext } from '@nestjs/microservices';
@@ -17,13 +17,21 @@ export class CompaniesConsumerService {
 
   async unitCreatedConsumer(unit: PlainUnitInterface, context: KafkaContext) {
     console.log(context.getTopic(), unit);
-    await this.unitsService.createOrUpdate(
-      new CompanyUnit(unit as unknown as CompanyUnitDocument),
-    );
+    try {
+      await this.unitsService.createOrUpdate(
+        new CompanyUnit(unit as unknown as CompanyUnitDocument),
+      );
+    } catch (err) {
+      Logger.error(err);
+    }
   }
 
   async unitUpdatedConsumer(unit: PlainUnitInterface, context: KafkaContext) {
-    await this.unitCreatedConsumer(unit, context);
-    await this.companiesService.updateCompanyUnit(unit);
+    try {
+      await this.unitCreatedConsumer(unit, context);
+      await this.companiesService.updateCompanyUnit(unit);
+    } catch (err) {
+      Logger.error(err);
+    }
   }
 }

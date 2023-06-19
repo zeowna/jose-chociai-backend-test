@@ -31,8 +31,6 @@ export class UnitsService extends AbstractService<
       createUnitDto.companyId,
     );
 
-    console.log('UnitsService.create', { createUnitDto, company });
-
     const created = await super.create({
       ...createUnitDto,
       company: company ? company : { _id: createUnitDto.companyId },
@@ -41,7 +39,10 @@ export class UnitsService extends AbstractService<
     await this.kafkaProducer.send({
       topic: TopicsEnum.UnitCreated,
       messages: [
-        { key: TopicsEnum.UnitCreated, value: JSON.stringify(created) },
+        {
+          key: TopicsEnum.UnitCreated,
+          value: JSON.stringify(created.present()),
+        },
       ],
     });
 
@@ -54,7 +55,10 @@ export class UnitsService extends AbstractService<
     await this.kafkaProducer.send({
       topic: TopicsEnum.UnitUpdated,
       messages: [
-        { key: TopicsEnum.UnitUpdated, value: JSON.stringify(updated) },
+        {
+          key: TopicsEnum.UnitUpdated,
+          value: JSON.stringify(updated.present()),
+        },
       ],
     });
 

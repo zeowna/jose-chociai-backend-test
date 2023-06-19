@@ -43,7 +43,11 @@ export class User extends AbstractMongooseEntity {
   company: UserCompany;
 
   present(): this {
-    return { ...super.present(), password: undefined };
+    return {
+      ...super.present(),
+      password: undefined,
+      company: this?.company?.present(),
+    };
   }
 }
 

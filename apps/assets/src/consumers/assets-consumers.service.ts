@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AssetsService } from '../assets/assets.service';
 import { AssetCompaniesService } from '../companies/asset-companies.service';
 import {
@@ -28,33 +28,50 @@ export class AssetsConsumersService {
     company: PlainCompanyInterface,
     context: KafkaContext,
   ) {
-    console.log(context.getTopic(), company);
-    await this.companiesService.createOrUpdate(
-      new AssetCompany(company as unknown as AssetCompanyDocument),
-    );
+    try {
+      console.log(context.getTopic(), company);
+
+      await this.companiesService.createOrUpdate(
+        new AssetCompany(company as unknown as AssetCompanyDocument),
+      );
+    } catch (err) {
+      Logger.error(err);
+    }
   }
 
   async companyUpdateConsumer(
     company: PlainCompanyInterface,
     context: KafkaContext,
   ) {
-    await this.companyCreatedConsumer(company, context);
-    await this.assetsService.updateAssetCompany(company);
+    try {
+      await this.companyCreatedConsumer(company, context);
+      await this.assetsService.updateAssetCompany(company);
+    } catch (err) {
+      Logger.error(err);
+    }
   }
 
   async unitCreatedConsumer(unit: PlainUnitInterface, context: KafkaContext) {
-    console.log(context.getTopic(), unit);
-    await this.unitService.createOrUpdate(
-      new AssetUnit({
-        ...unit,
-        companyId: unit.company.id as string,
-      } as unknown as AssetUnitDocument),
-    );
+    try {
+      console.log(context.getTopic(), unit);
+
+      await this.unitService.createOrUpdate(
+        new AssetUnit({
+          ...unit,
+          companyId: unit.company.id as string,
+        } as unknown as AssetUnitDocument),
+      );
+    } catch (err) {
+      Logger.error(err);
+    }
   }
 
   async unitUpdatedConsumer(unit: PlainUnitInterface, context: KafkaContext) {
-    console.log(context.getTopic(), unit);
-    await this.unitCreatedConsumer(unit, context);
-    await this.assetsService.updateAssetUnit(unit);
+    try {
+      await this.unitCreatedConsumer(unit, context);
+      await this.assetsService.updateAssetUnit(unit);
+    } catch (err) {
+      Logger.error(err);
+    }
   }
 }

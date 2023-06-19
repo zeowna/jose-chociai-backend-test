@@ -117,7 +117,7 @@ export class AssetsService extends AbstractService<
       messages: [
         {
           key: TopicsEnum.AssetHealthLevelUpdated,
-          value: JSON.stringify(updated),
+          value: JSON.stringify(updated.present()),
         },
       ],
     });
