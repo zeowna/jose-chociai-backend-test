@@ -51,7 +51,7 @@ export class Asset extends AbstractMongooseEntity {
   status: AssetStatusEnum;
 
   /**
-   * Percentage float 0 to 1
+   * Percentage float goes 0.0 to 1.0
    */
   @Prop({
     max: 1,
@@ -60,6 +60,9 @@ export class Asset extends AbstractMongooseEntity {
   })
   healthLevel: number;
 
+  /**
+   * TODO: Implement "upload"
+   */
   @Prop()
   image?: string;
 }

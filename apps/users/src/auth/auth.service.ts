@@ -18,7 +18,7 @@ export class AuthService extends AbstractAuthService {
   }
 
   async signIn(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email, true);
+    const user = await this.usersService.findByEmail(email);
 
     const isEqual = await this.hashService.comparePasswords(
       user.password,

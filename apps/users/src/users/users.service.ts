@@ -31,8 +31,8 @@ export class UsersService extends AbstractService<
     return this.repository.findByCpf(cpf);
   }
 
-  async findByEmail(email: string, includePassword = false) {
-    return this.repository.findByEmail(email, includePassword);
+  async findByEmail(email: string) {
+    return this.repository.findByEmail(email);
   }
 
   async create(createUserDto: CreateUserDto) {

@@ -16,6 +16,14 @@ import { AssetCompaniesService } from '../companies/asset-companies.service';
 import { AssetUnitsService } from '../units/asset-units.service';
 import { UpdateAssetHealthLevelDto } from './dto/update-asset-health-level.dto';
 import { KafkaProducer, TopicsEnum } from '@zeowna/kafka';
+import {
+  AssetUnit,
+  AssetUnitDocument,
+} from '../units/entities/asset-unit.entity';
+import {
+  AssetCompany,
+  AssetCompanyDocument,
+} from '../companies/entities/asset-company.entity';
 
 @Injectable()
 export class AssetsService extends AbstractService<
@@ -65,23 +73,32 @@ export class AssetsService extends AbstractService<
         `Owner and Unit doesn't match owner: ${owner._id} and unit.company._id: ${unit.companyId}`,
       );
     }
+    createAssetDto.owner = owner
+      ? owner
+      : new AssetCompany({
+          id: createAssetDto.ownerId,
+        } as AssetCompanyDocument);
 
-    return super.create({
-      ...createAssetDto,
-      owner: owner ? owner : { _id: createAssetDto.ownerId },
-      unit: unit ? unit : { _id: createAssetDto.unitId },
-    });
+    createAssetDto.unit = unit
+      ? unit
+      : new AssetUnit({ id: createAssetDto.unitId } as AssetUnitDocument);
+
+    return super.create(createAssetDto);
   }
 
   async updateAssetCompany(company: PlainCompanyInterface) {
-    await this.repository.updateAssetCompany(company);
+    await this.repository.updateAssetCompany(
+      new AssetCompany(company as unknown as AssetCompanyDocument),
+    );
   }
 
   async updateAssetUnit(unit: PlainUnitInterface) {
-    await this.repository.updateAssetUnit({
-      ...unit,
-      companyId: unit.company.id as string,
-    });
+    await this.repository.updateAssetUnit(
+      new AssetUnit({
+        ...unit,
+        companyId: unit.company.id,
+      } as unknown as AssetUnitDocument),
+    );
   }
 
   async updateHealthLevel(

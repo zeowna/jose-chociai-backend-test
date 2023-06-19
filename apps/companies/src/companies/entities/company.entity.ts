@@ -13,7 +13,6 @@ export type CompanyDocument = HydratedDocument<Company>;
 export class Company extends AbstractMongooseEntity {
   constructor(document: CompanyDocument) {
     super(document);
-
     this.name = document.name;
     this.cnpj = document.cnpj;
     this.units = (document?.units ?? []).map(

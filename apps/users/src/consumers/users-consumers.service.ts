@@ -3,6 +3,10 @@ import { UsersService } from '../users/users.service';
 import { UserCompaniesService } from '../companies/user-companies.service';
 import { KafkaContext } from '@nestjs/microservices';
 import { PlainCompanyInterface } from '@zeowna/entities-definition';
+import {
+  UserCompany,
+  UserCompanyDocument,
+} from '../companies/entities/user-company.entity';
 
 @Injectable()
 export class UsersConsumersService {
@@ -16,7 +20,9 @@ export class UsersConsumersService {
     context: KafkaContext,
   ) {
     console.log(context.getTopic(), company);
-    await this.companiesService.createOrUpdate(company);
+    await this.companiesService.createOrUpdate(
+      new UserCompany(company as unknown as UserCompanyDocument),
+    );
   }
 
   async companyUpdatedConsumer(

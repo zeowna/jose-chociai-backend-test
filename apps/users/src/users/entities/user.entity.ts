@@ -12,14 +12,12 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true })
 export class User extends AbstractMongooseEntity {
-  constructor(document: UserDocument, includePassword = false) {
+  constructor(document: UserDocument) {
     super(document);
     this.name = document.name;
     this.cpf = document.cpf;
     this.email = document.email;
-    if (includePassword) {
-      this.password = document.password;
-    }
+    this.password = document.password;
     this.company = new UserCompany(document.company as CompanyDocument);
   }
 
@@ -43,6 +41,10 @@ export class User extends AbstractMongooseEntity {
   })
   @Prop({ type: UserCompanySchema, require: true })
   company: UserCompany;
+
+  present(): this {
+    return { ...super.present(), password: undefined };
+  }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

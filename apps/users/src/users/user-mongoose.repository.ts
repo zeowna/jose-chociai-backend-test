@@ -23,14 +23,14 @@ export class UserMongooseRepository extends AbstractMongooseRepository<User> {
     return new User(found as UserDocument);
   }
 
-  async findByEmail(email: string, includePassword: boolean) {
+  async findByEmail(email: string) {
     const found = await this.repository.findOne({ email }).lean().exec();
 
     if (!found) {
       return null;
     }
 
-    return new User(found as UserDocument, includePassword);
+    return new User(found as UserDocument);
   }
 
   async updatePassword(id: string, password: string) {
