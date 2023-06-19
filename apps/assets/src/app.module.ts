@@ -10,14 +10,14 @@ import { AssetsConsumerModule } from './consumers/assets-consumer.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://db/tractian'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     ZeownaAuthModule.register({
       global: true,
       secret: jwtConstants.secret,
     }),
     ZeownaKafkaModule.register(
-      { brokers: ['kafka:9092'] },
-      { groupId: 'assets' },
+      { brokers: process.env.KAFKA_BROKERS.split(',') },
+      { groupId: process.env.KAFKA_CONSUMER_GROUP_ID },
     ),
     AssetsModule,
     AssetCompaniesModule,

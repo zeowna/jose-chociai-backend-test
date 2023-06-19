@@ -8,7 +8,7 @@ import { UnitsConsumerModule } from './consumers/units-consumer.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://db/tractian'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     ZeownaAuthModule.register({
       global: true,
       secret: jwtConstants.secret,

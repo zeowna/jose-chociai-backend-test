@@ -1,10 +1,9 @@
 GET http://localhost:8080/assets?sort={ "createdAt": -1 }
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExNDlmYjAwMDk0YTM0NWZiYmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MDY2N2I0ZjFkODg0ZGU4NTAyM2JlIiwiaWF0IjoxNjg3MjA1Mjk4fQ.F-oiZggpc-1O-NaCW8Uit8_oMcB5T7U-0sHLSRkPSFA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzMzczODc2OGIxNzZlOTg0YTkiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MGNiMjJhNjM2ZjI0NzExOTA3NjgxIiwiaWF0IjoxNjg3MjEwODA2fQ.8ot6UL2EGsiND8T--cVt8K67FcMoL0LjN_0b-pdQbHs
 
 ###
 GET http://localhost:8080/assets/648f9522f2e562c6f6ad23dc
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExNDlmYjAwMDk0YTM0NWZiYmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MDY2N2I0ZjFkODg0ZGU4NTAyM2JlIiwiaWF0IjoxNjg3MjA1Mjk4fQ.F-oiZggpc-1O-NaCW8Uit8_oMcB5T7U-0sHLSRkPSFA
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzMzczODc2OGIxNzZlOTg0YTkiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MGNiMjJhNjM2ZjI0NzExOTA3NjgxIiwiaWF0IjoxNjg3MjEwODA2fQ.8ot6UL2EGsiND8T--cVt8K67FcMoL0LjN_0b-pdQbHs
 
 
 ###
@@ -12,23 +11,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExN
 
 POST http://localhost:8080/assets
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExNDlmYjAwMDk0YTM0NWZiYmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MDY2N2I0ZjFkODg0ZGU4NTAyM2JlIiwiaWF0IjoxNjg3MjA1Mjk4fQ.F-oiZggpc-1O-NaCW8Uit8_oMcB5T7U-0sHLSRkPSFA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzMzczODc2OGIxNzZlOTg0YTkiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MGNiMjJhNjM2ZjI0NzExOTA3NjgxIiwiaWF0IjoxNjg3MjEwODA2fQ.8ot6UL2EGsiND8T--cVt8K67FcMoL0LjN_0b-pdQbHs
 
 
 {
   "name": "Máquina de fazer freio",
   "description": "Faz freios",
   "model": "1234213",
-  "unitId": "648f8992ffc1119a58111aa4",
+  "unitId": "6490cb4c68de1cf5da5d1f16",
   "health": 0.5
 }
 
 ###
 
-PATCH http://localhost:8080/assets/648f9522f2e562c6f6ad23dc/healthLevel
+PATCH http://localhost:8080/assets/6490cb651eb8531c398aed09/healthLevel
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExNDlmYjAwMDk0YTM0NWZiYmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MDY2N2I0ZjFkODg0ZGU4NTAyM2JlIiwiaWF0IjoxNjg3MjA1Mjk4fQ.F-oiZggpc-1O-NaCW8Uit8_oMcB5T7U-0sHLSRkPSFA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzMzczODc2OGIxNzZlOTg0YTkiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MGNiMjJhNjM2ZjI0NzExOTA3NjgxIiwiaWF0IjoxNjg3MjEwODA2fQ.8ot6UL2EGsiND8T--cVt8K67FcMoL0LjN_0b-pdQbHs
 
 {
-  "healthLevel": 0.2312321231
+  "healthLevel": 0.96
 }

@@ -15,11 +15,13 @@ export class AlertsService {
   ) {
     console.log(context.getTopic(), asset);
 
-    if (asset.healthLevel < 0.75) {
-      await this.notificationService.send(
-        `Unit ${asset.unit.id} - ${asset.unit.name} | Asset ${asset.id} - ${asset.name} - ${asset.model}: Health Level down 75% ${asset.healthLevel}`,
-        asset.owner.id as string,
-      );
-    }
+    await this.notificationService.send(
+      `${asset.unit.id} - ${asset.unit.name} | ${asset.id} - ${
+        asset.status
+      } - ${asset.name} - ${asset.model}: Health Level ${
+        asset.healthLevel * 100
+      }`,
+      asset.owner.id as string,
+    );
   }
 }

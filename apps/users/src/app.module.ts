@@ -7,7 +7,7 @@ import { UserCompaniesModule } from './companies/user-companies.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://db/tractian'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     UsersModule,
     AuthModule,
     UserCompaniesModule,

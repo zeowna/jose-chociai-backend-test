@@ -10,8 +10,8 @@ import { UnitCompaniesModule } from '../companies/unit-companies.module';
 @Module({
   imports: [
     ZeownaKafkaModule.register(
-      { brokers: ['kafka:9092'] },
-      { groupId: 'unit' },
+      { brokers: process.env.KAFKA_BROKERS.split(',') },
+      { groupId: process.env.KAFKA_CONSUMER_GROUP_ID },
     ),
     MongooseModule.forFeature([{ name: Unit.name, schema: UnitSchema }]),
     UnitCompaniesModule,

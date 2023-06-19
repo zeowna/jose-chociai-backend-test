@@ -50,6 +50,8 @@ services:
 
   db:
     image: mongo:6
+    ports:
+      - '27017:27017'
     restart: always
   users:
     build: .
@@ -57,6 +59,8 @@ services:
       - ./:/app
     ports:
       - '3000:3000'
+    env_file:
+      - ./apps/users/.env
     command: 'sh -c "yarn && yarn nest start --watch users"'
     depends_on:
       - db
@@ -67,6 +71,8 @@ services:
       - ./:/app
     ports:
       - '3001:3000'
+    env_file:
+      - ./apps/companies/.env
     command: 'sh -c "yarn && yarn nest start --watch companies"'
     depends_on:
       - db
@@ -77,6 +83,8 @@ services:
       - ./:/app
     ports:
       - '3002:3000'
+    env_file:
+      - ./apps/units/.env
     command: 'sh -c "yarn && yarn nest start --watch units"'
     depends_on:
       - db
@@ -87,6 +95,8 @@ services:
       - ./:/app
     ports:
       - '3003:3000'
+    env_file:
+      - ./apps/assets/.env
     command: 'sh -c "yarn && yarn nest start --watch assets"'
     depends_on:
       - db
@@ -97,6 +107,8 @@ services:
       - ./:/app
     ports:
       - '3004:3000'
+    env_file:
+      - ./apps/alerts/.env
     command: 'sh -c "yarn && yarn nest start --watch alerts"'
     depends_on:
       - kafka

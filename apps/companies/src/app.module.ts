@@ -8,7 +8,7 @@ import { jwtConstants } from '@zeowna/auth/constants';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://db/tractian'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     ZeownaAuthModule.register({
       global: true,
       secret: jwtConstants.secret,

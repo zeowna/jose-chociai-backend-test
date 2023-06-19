@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { AbstractService, SortParams } from '@zeowna/common';
+import { AbstractService, ID, SortParams } from '@zeowna/common';
 import { Asset } from './entities/asset.entity';
 import { AssetsMongooseRepository } from './assets-mongoose.repository';
 import { CreateAssetDto } from './dto/create-asset.dto';
@@ -24,6 +24,7 @@ import {
   AssetCompany,
   AssetCompanyDocument,
 } from '../companies/entities/asset-company.entity';
+import { AssetStatusEnum } from './entities/asset-status.enum';
 
 @Injectable()
 export class AssetsService extends AbstractService<
@@ -101,14 +102,39 @@ export class AssetsService extends AbstractService<
     );
   }
 
+  private async updateStatus(id: ID, status: AssetStatusEnum) {
+    const found = await this.findById(id);
+
+    return this.repository.updateStatus(found.id, status);
+  }
+
+  private updateStatusByHealthLevel(id: ID, healthLevel: number) {
+    const isAlerting = healthLevel >= 0.75 && healthLevel <= 0.95;
+    const isStopped = healthLevel < 0.75;
+
+    if (isAlerting) {
+      return this.updateStatus(id, AssetStatusEnum.Alerting);
+    }
+
+    if (isStopped) {
+      return this.updateStatus(id, AssetStatusEnum.Stopped);
+    }
+
+    return this.updateStatus(id, AssetStatusEnum.Running);
+  }
+
   async updateHealthLevel(
     id: string,
     ownerId: string,
     updateAssetHealthLevelDto: UpdateAssetHealthLevelDto,
   ) {
     const found = await this.findByIdAndOwnerId(id, ownerId);
-    const updated = await this.repository.updateHealthLevel(
+    await this.repository.updateHealthLevel(
       found.id as string,
+      updateAssetHealthLevelDto.healthLevel,
+    );
+    const updated = await this.updateStatusByHealthLevel(
+      found.id,
       updateAssetHealthLevelDto.healthLevel,
     );
 

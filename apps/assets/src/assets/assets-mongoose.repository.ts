@@ -5,7 +5,8 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { AssetCompany } from '../companies/entities/asset-company.entity';
 import { AssetUnit } from '../units/entities/asset-unit.entity';
-import { SortParams } from '@zeowna/common';
+import { ID, SortParams } from '@zeowna/common';
+import { AssetStatusEnum } from './entities/asset-status.enum';
 
 @Injectable()
 export class AssetsMongooseRepository extends AbstractMongooseRepository<Asset> {
@@ -45,11 +46,28 @@ export class AssetsMongooseRepository extends AbstractMongooseRepository<Asset> 
     return new Asset(found as AssetDocument);
   }
 
+  async updateStatus(id: ID, status: AssetStatusEnum) {
+    const updated = await this.repository
+      .findByIdAndUpdate(id, { $set: { status } }, { new: true })
+      .lean()
+      .exec();
+
+    if (!updated) {
+      return null;
+    }
+
+    return new Asset(updated as AssetDocument);
+  }
+
   async updateHealthLevel(id: string, healthLevel: number) {
     const updated = await this.repository
       .findByIdAndUpdate(id, { $set: { healthLevel } }, { new: true })
       .lean()
       .exec();
+
+    if (!updated) {
+      return null;
+    }
 
     return new Asset(updated as AssetDocument);
   }
