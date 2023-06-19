@@ -2,15 +2,16 @@ import {
   MockedMongooseEntity,
   MockedMongooseEntityDocument,
 } from './mocked-mongoose.entity';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
-export const generateMockedMongooseEntityFunction = (
+export const generateMockedMongooseEntity = (
   props: Partial<MockedMongooseEntity> = {},
-): MockedMongooseEntity =>
+) =>
   new MockedMongooseEntity({
-    id: props.id ?? new mongoose.Types.ObjectId(),
     mutableProp: 'any_string',
     createdAt: new Date(),
     updatedAt: new Date(),
+    id: props?.id,
+    _id: props?.id ? new mongoose.Types.ObjectId(props?.id) : undefined,
     ...props,
   } as MockedMongooseEntityDocument);

@@ -7,7 +7,12 @@ export type MockedMongooseEntityDocument =
 
 @Schema({ timestamps: true })
 export class MockedMongooseEntity extends AbstractMongooseEntity {
-  @Prop()
+  constructor(document: MockedMongooseEntityDocument) {
+    super(document);
+    this.mutableProp = document.mutableProp;
+  }
+
+  @Prop({ required: true })
   mutableProp: string;
 }
 

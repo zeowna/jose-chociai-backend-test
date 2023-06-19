@@ -15,9 +15,9 @@ export abstract class AbstractMongooseEntity extends AbstractEntity {
 
   @ApiProperty()
   @Prop()
-  createdAt?: Date;
+  createdAt: Date;
 
   @ApiProperty()
   @Prop()
-  updatedAt?: Date;
+  updatedAt: Date;
 }

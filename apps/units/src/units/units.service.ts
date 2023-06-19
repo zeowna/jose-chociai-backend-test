@@ -22,6 +22,10 @@ export class UnitsService extends AbstractService<
     super(unitsRepository);
   }
 
+  async findByIdAndCompanyId(id: string, companyId: string) {
+    return this.unitsRepository.findByIdAndCompanyId(id, companyId);
+  }
+
   async create(createUnitDto: CreateUnitDto) {
     const company = await this.companiesService.findById(
       createUnitDto.companyId,

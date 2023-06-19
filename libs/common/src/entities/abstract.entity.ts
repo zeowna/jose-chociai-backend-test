@@ -4,11 +4,11 @@ export type ID = string | number;
 
 export abstract class AbstractEntity {
   @ApiProperty()
-  id?: ID;
+  id: ID;
   @ApiProperty()
-  createdAt?: Date;
+  createdAt: Date;
   @ApiProperty()
-  updatedAt?: Date;
+  updatedAt: Date;
 
   constructor(props: AbstractEntity) {
     this.id = props.id;

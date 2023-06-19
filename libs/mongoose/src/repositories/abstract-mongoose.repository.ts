@@ -35,7 +35,7 @@ export abstract class AbstractMongooseRepository<
 
   async findById(id: ID) {
     return this.documentToEntity(
-      await this.mongooseRepositoryImpl.findById(id).exec(),
+      await this.mongooseRepositoryImpl.findById(id).lean().exec(),
     );
   }
 
