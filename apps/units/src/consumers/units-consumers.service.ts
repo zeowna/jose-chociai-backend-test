@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PlainCompanyInterface } from '@zeowna/entities-definition';
+import { PlainCompany } from '@zeowna/entities-definition';
 import { UnitsService } from '../units/units.service';
 import { UnitCompaniesService } from '../companies/unit-companies.service';
 import { KafkaContext } from '@nestjs/microservices';
@@ -15,10 +15,7 @@ export class UnitsConsumersService {
     private readonly unitsService: UnitsService,
   ) {}
 
-  async companyCreatedConsumer(
-    company: PlainCompanyInterface,
-    context: KafkaContext,
-  ) {
+  async companyCreatedConsumer(company: PlainCompany, context: KafkaContext) {
     console.log(context.getTopic(), company);
     try {
       await this.companiesService.createOrUpdate(
@@ -29,10 +26,7 @@ export class UnitsConsumersService {
     }
   }
 
-  async companyUpdatedConsumer(
-    company: PlainCompanyInterface,
-    context: KafkaContext,
-  ) {
+  async companyUpdatedConsumer(company: PlainCompany, context: KafkaContext) {
     try {
       await this.companyCreatedConsumer(company, context);
       await this.unitsService.updateUnitCompany(company);

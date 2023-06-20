@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AssetsService } from '../assets/assets.service';
 import { AssetCompaniesService } from '../companies/asset-companies.service';
-import {
-  PlainCompanyInterface,
-  PlainUnitInterface,
-} from '@zeowna/entities-definition';
+import { PlainCompany, PlainUnitInterface } from '@zeowna/entities-definition';
 import { AssetUnitsService } from '../units/asset-units.service';
 import { KafkaContext } from '@nestjs/microservices';
 import {
@@ -26,10 +23,7 @@ export class AssetsConsumersService {
     private readonly logger: NestLoggerService,
   ) {}
 
-  async companyCreatedConsumer(
-    company: PlainCompanyInterface,
-    context: KafkaContext,
-  ) {
+  async companyCreatedConsumer(company: PlainCompany, context: KafkaContext) {
     const topic = context.getTopic();
 
     try {
@@ -43,10 +37,7 @@ export class AssetsConsumersService {
     }
   }
 
-  async companyUpdateConsumer(
-    company: PlainCompanyInterface,
-    context: KafkaContext,
-  ) {
+  async companyUpdateConsumer(company: PlainCompany, context: KafkaContext) {
     const topic = context.getTopic();
 
     try {

@@ -5,7 +5,7 @@ import {
   MessagePattern,
   Payload,
 } from '@nestjs/microservices';
-import { PlainCompanyInterface } from '@zeowna/entities-definition';
+import { PlainCompany } from '@zeowna/entities-definition';
 import { UsersConsumersService } from './users-consumers.service';
 import { TopicsEnum } from '@zeowna/kafka';
 
@@ -15,7 +15,7 @@ export class UsersConsumerController {
 
   @MessagePattern(TopicsEnum.CompanyCreated)
   async companyCreatedConsumer(
-    @Payload() message: PlainCompanyInterface,
+    @Payload() message: PlainCompany,
     @Ctx() context: KafkaContext,
   ) {
     await this.consumersService.companyCreatedConsumer(message, context);
@@ -23,7 +23,7 @@ export class UsersConsumerController {
 
   @MessagePattern(TopicsEnum.CompanyUpdated)
   async companyUpdatedConsumer(
-    @Payload() message: PlainCompanyInterface,
+    @Payload() message: PlainCompany,
     @Ctx() context: KafkaContext,
   ) {
     await this.consumersService.companyUpdatedConsumer(message, context);

@@ -5,7 +5,7 @@ import { UserMongooseRepository } from './user-mongoose.repository';
 import { BcryptHashService } from '../hash/bcrypt-hash.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PlainCompanyInterface } from '@zeowna/entities-definition';
+import { PlainCompany } from '@zeowna/entities-definition';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { UserCompaniesService } from '../companies/user-companies.service';
 import {
@@ -63,7 +63,7 @@ export class UsersService extends AbstractService<
     );
   }
 
-  async updateUserCompany(company: PlainCompanyInterface) {
+  async updateUserCompany(company: PlainCompany) {
     return this.repository.updateUserCompany(company);
   }
 }

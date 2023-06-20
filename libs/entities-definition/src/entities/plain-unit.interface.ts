@@ -1,10 +1,10 @@
-import { PlainEntityInterface } from './plain-entity.interface';
+import { PlainEntity } from './plain-entity.interface';
 
-export interface PlainUnitCompanyInterface extends PlainEntityInterface {
+export interface PlainUnitCompany extends PlainEntity {
   name?: string;
 }
 
-export interface PlainUnitInterface extends PlainEntityInterface {
+export interface PlainUnitInterface extends PlainEntity {
   name: string;
-  company: PlainUnitCompanyInterface;
+  company: PlainUnitCompany;
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User, UserDocument } from './entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PlainCompanyInterface } from '@zeowna/entities-definition';
+import { PlainCompany } from '@zeowna/entities-definition';
 import { AbstractMongooseRepository } from '@zeowna/mongoose';
 
 @Injectable()
@@ -46,7 +46,7 @@ export class UserMongooseRepository extends AbstractMongooseRepository<User> {
     return new User(updated as UserDocument);
   }
 
-  async updateUserCompany(company: PlainCompanyInterface) {
+  async updateUserCompany(company: PlainCompany) {
     await this.repository
       .updateMany({ 'company._id': company.id }, { company: company })
       .lean()

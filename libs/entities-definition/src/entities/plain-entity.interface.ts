@@ -1,6 +1,6 @@
 import { ID } from '@zeowna/common';
 
-export interface PlainEntityInterface {
+export interface PlainEntity {
   readonly id: ID;
   readonly createdAt: Date;
   readonly updatedAt: Date;

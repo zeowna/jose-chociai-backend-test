@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PlainAssetInterface } from '@zeowna/entities-definition';
+import { PlainAsset } from '@zeowna/entities-definition';
 import { KafkaContext } from '@nestjs/microservices';
 import { AlertNotificationsService } from './alert-notifications.service';
 import { NestLoggerService } from '@zeowna/logger';
@@ -11,10 +11,7 @@ export class AlertsService {
     private readonly logger: NestLoggerService,
   ) {}
 
-  async assetHealthLevelUpdated(
-    asset: PlainAssetInterface,
-    context: KafkaContext,
-  ) {
+  async assetHealthLevelUpdated(asset: PlainAsset, context: KafkaContext) {
     const topic = context.getTopic();
 
     try {

@@ -4,7 +4,7 @@ import { Unit } from './entities/unit.entity';
 import { UnitsMongooseRepository } from './units-mongoose.repository';
 import { CreateUnitDto } from './dto/create-unit.dto';
 import { UpdateUnitDto } from './dto/update-unit.dto';
-import { PlainCompanyInterface } from '@zeowna/entities-definition';
+import { PlainCompany } from '@zeowna/entities-definition';
 import { KafkaProducer, TopicsEnum } from '@zeowna/kafka';
 import { UnitCompaniesService } from '../companies/unit-companies.service';
 import {
@@ -70,7 +70,7 @@ export class UnitsService extends AbstractService<
     return updated;
   }
 
-  async updateUnitCompany(company: PlainCompanyInterface) {
+  async updateUnitCompany(company: PlainCompany) {
     await this.unitsRepository.updateUnitCompany(company);
   }
 }

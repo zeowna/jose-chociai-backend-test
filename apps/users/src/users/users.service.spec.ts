@@ -4,7 +4,7 @@ import { MockedMongooseFactory } from '@zeowna/mongoose';
 import * as mongoose from 'mongoose';
 import { disconnect } from 'mongoose';
 import { BcryptHashService } from '../hash/bcrypt-hash.service';
-import { PlainCompanyInterface } from '@zeowna/entities-definition';
+import { PlainCompany } from '@zeowna/entities-definition';
 import { UserCompaniesModule } from '../companies/user-companies.module';
 import { UsersModule } from './users.module';
 import { assertUser, generateCreateUserDto, generateUser } from './test';
@@ -133,7 +133,7 @@ describe('UsersService', () => {
     });
 
     it('should update any Users with of a particular Company', async () => {
-      const company: PlainCompanyInterface = {
+      const company: PlainCompany = {
         id: new mongoose.Types.ObjectId().toHexString(),
         name: 'Company Name',
         createdAt: new Date(),

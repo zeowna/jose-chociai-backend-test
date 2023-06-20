@@ -2,7 +2,7 @@ import { UsersConsumersService } from './users-consumers.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { UsersService } from '../users/users.service';
-import { PlainCompanyInterface } from '@zeowna/entities-definition';
+import { PlainCompany } from '@zeowna/entities-definition';
 import mongoose from 'mongoose';
 import { UserCompaniesService } from '../companies/user-companies.service';
 import { TopicsEnum } from '@zeowna/kafka';
@@ -52,7 +52,7 @@ describe('UsersConsumersService', () => {
     });
 
     it('should create or update a UserCompany', async () => {
-      const company: PlainCompanyInterface = {
+      const company: PlainCompany = {
         id: new mongoose.Types.ObjectId().toHexString(),
         name: 'Company Name',
         createdAt: new Date(),
@@ -78,7 +78,7 @@ describe('UsersConsumersService', () => {
     });
 
     it('should create or update a UserCompany', async () => {
-      const company: PlainCompanyInterface = {
+      const company: PlainCompany = {
         id: new mongoose.Types.ObjectId().toHexString(),
         name: 'Company Name',
         createdAt: new Date(),

@@ -7,7 +7,7 @@ import {
   Payload,
 } from '@nestjs/microservices';
 import { TopicsEnum } from '@zeowna/kafka';
-import { PlainAssetInterface } from '@zeowna/entities-definition';
+import { PlainAsset } from '@zeowna/entities-definition';
 
 @Controller()
 export class AlertsConsumerController {
@@ -18,7 +18,7 @@ export class AlertsConsumerController {
    */
   @MessagePattern(TopicsEnum.AssetHealthLevelUpdated)
   async assetHealthLevelUpdated(
-    @Payload() message: PlainAssetInterface,
+    @Payload() message: PlainAsset,
     @Ctx() context: KafkaContext,
   ) {
     return this.alertsService.assetHealthLevelUpdated(message, context);

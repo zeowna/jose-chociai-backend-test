@@ -8,10 +8,7 @@ import { Asset } from './entities/asset.entity';
 import { AssetsMongooseRepository } from './assets-mongoose.repository';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
-import {
-  PlainCompanyInterface,
-  PlainUnitInterface,
-} from '@zeowna/entities-definition';
+import { PlainCompany, PlainUnitInterface } from '@zeowna/entities-definition';
 import { AssetCompaniesService } from '../companies/asset-companies.service';
 import { AssetUnitsService } from '../units/asset-units.service';
 import { UpdateAssetHealthLevelDto } from './dto/update-asset-health-level.dto';
@@ -87,7 +84,7 @@ export class AssetsService extends AbstractService<
     return super.create(createAssetDto);
   }
 
-  async updateAssetCompany(company: PlainCompanyInterface) {
+  async updateAssetCompany(company: PlainCompany) {
     await this.repository.updateAssetCompany(
       new AssetCompany(company as unknown as AssetCompanyDocument),
     );
