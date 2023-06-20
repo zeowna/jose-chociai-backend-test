@@ -48,14 +48,101 @@ $ docker compose up
 
 ## Technologies used:
 
-- Docker Compose
-- Database (MongoDB)
-- Nestjs 9 and Typescript 5.0.0
+- Docker and Docker Compose
+- MongoDB
 - Mongoose 7.2.4
+- Nestjs 9 and Typescript 5.0.0
 - Class Validator/Class Transformer
+- Kafka
 
 Although it demands ExpressJS, I decided to use Nest because it's what I've been working lately.
 
 Nest provides a Monorepo mode, so I decided to use it and make easier to organize libs and apps.
 Other thing was the use of @nestjs/* libs, in order to keep things the "Nest" way as possible for this test,
 Hope you'll see some nice abstractions along the way.
+
+## Libraries
+
+### @zeowna/common
+
+All basic stuff:
+
+- AbstractEntity;
+- ServiceInterface and AbstractService;
+- RepositoryInterface;
+- Types
+- Interceptors (Presenter)
+
+### @zeowna/mongoose
+
+Extends @zeowna/common Abstractions for Mongoose:
+
+- AbstractMongooseEntity;
+- AbstractMongooseRepository.
+
+### @zeowna/logger
+
+Abstractions for log
+
+- LoggerInterface;
+- NestLoggerService (Example of Possible Implementation);
+- ConsoleLoggerService (Example of Possible Implementation).
+
+### @zeowna/kafka
+
+Custom nest Kafka module and Producer.
+
+### @zeowna/auth
+
+Reusable things for authentication and authorization
+
+- AbstractAuthService;
+- AuthGuard.
+
+### @zeowna/entities-definition
+
+Provides POJO Entities typings
+
+- PlainEntity and etc.
+
+## Apps
+
+## Users
+
+Provides Users and Auth resources (Restful API) and a Kafka Producer.
+
+- Users CRUD;
+- Auth (signIn);
+- Produces messages for Users creation and updates ;
+- OpenApi Documentation.
+
+## Companies
+
+Provides Companies resource (Restful API) and a Kafka Producer/Consumer.
+
+- Companies CRUD;
+- Produces messages for Companies creation and updates;
+- Consumes Units creation and updates (keeps local copies in its own DB and stores last 10 related to company as subset).
+
+## Units
+
+Provides Units resource (Restful API) and a Kafka Producer/Consumer.
+
+- Units CRUD;
+- Produces messages for Units creation and updates;
+- Consumes Companies creation and updates (keeps local copies in its own DB)
+
+## Assets
+
+Provides Assets resource (Restful API) and a Kafka Producer/Consumer.
+
+- Assets CRUD;
+- Produces messages for Assets creation and updates;
+- Consumes Units creation and updates (keeps local copies in its own DB)
+- Consumes Companies creation and updates (keeps local copies in its own DB)
+
+## Alerts
+
+Provides Kafka Consumer.
+
+- Consumes Assets Health Level updates and Notifies its Company 
