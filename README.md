@@ -120,7 +120,7 @@ Provides Users and Auth resources (Restful API) and a Kafka Producer.
 - Users CRUD;
 - Auth (signIn);
 - Produces messages for Users creation and updates ;
-- [OpenApi Documentation](http:localhost:3000/api).
+- [OpenApi Documentation](http://localhost:3000/api).
 
 ## Companies
 
@@ -130,7 +130,7 @@ Provides Companies resource (Restful API) and a Kafka Producer/Consumer.
 - Produces messages for Companies creation and updates;
 - Consumes Units creation and updates (keeps local copies in its own DB and stores last 10 related to company as
   subset).
-- [OpenApi Documentation](http:localhost:3001/api).
+- [OpenApi Documentation](http://localhost:3001/api).
 
 ## Units
 
@@ -139,7 +139,7 @@ Provides Units resource (Restful API) and a Kafka Producer/Consumer.
 - Units CRUD;
 - Produces messages for Units creation and updates;
 - Consumes Companies creation and updates (keeps local copies in its own DB)
-- [OpenApi Documentation](http:localhost:3002/api).
+- [OpenApi Documentation](http://localhost:3002/api).
 
 ## Assets
 
@@ -149,10 +149,17 @@ Provides Assets resource (Restful API) and a Kafka Producer/Consumer.
 - Produces messages for Assets creation and updates;
 - Consumes Units creation and updates (keeps local copies in its own DB)
 - Consumes Companies creation and updates (keeps local copies in its own DB)
-- [OpenApi Documentation](http:localhost:3003/api).
+- [OpenApi Documentation](http://localhost:3003/api).
 
 ## Alerts
 
 Provides Kafka Consumer.
 
-- Consumes Assets Health Level updates and Notifies its Company 
+- Consumes Assets Health Level updates and Notifies its Company.
+
+## Things I wish I did, but there wasn't time
+
+- More Test Coverage;
+- Asset Image upload;
+- A Auth Service outside Users service (Role Based);
+- A Redis Cache to Store Auth Tokens and Expirations.
