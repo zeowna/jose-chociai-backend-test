@@ -16,11 +16,21 @@ import { AssetsService } from './assets.service';
 import { AuthGuard } from '@zeowna/auth';
 import { UpdateAssetHealthLevelDto } from './dto/update-asset-health-level.dto';
 import { CustomRequest } from '@zeowna/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Asset } from './entities/asset.entity';
 
+@ApiTags('Assets')
 @Controller('assets')
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: [Asset] })
   @Get()
   @UseGuards(AuthGuard)
   async findAll(
@@ -37,12 +47,16 @@ export class AssetsController {
     );
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: [Asset] })
   @Get(':id')
   @UseGuards(AuthGuard)
   async findById(@Req() { user }: CustomRequest, @Param('id') id: string) {
     return this.assetsService.findByIdAndOwnerId(id, user.companyId);
   }
 
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: Asset })
   @Post()
   @UseGuards(AuthGuard)
   async create(
@@ -53,6 +67,8 @@ export class AssetsController {
     return this.assetsService.create(createAssetDto);
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Asset })
   @Patch(':id')
   @UseGuards(AuthGuard)
   async update(
@@ -62,12 +78,16 @@ export class AssetsController {
     return this.assetsService.update(id, updateAssetDto);
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Asset })
   @Delete(':id')
   @UseGuards(AuthGuard)
   async remove(@Param('id') id: string) {
     return this.assetsService.remove(id);
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Asset })
   @Patch(':id/healthLevel')
   @UseGuards(AuthGuard)
   async updateHealthLevel(

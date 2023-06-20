@@ -128,9 +128,9 @@ Provides Companies resource (Restful API) and a Kafka Producer/Consumer.
 
 - Companies CRUD;
 - Produces messages for Companies creation and updates;
-- Consumes Units creation and updates (keeps local copies in its own DB and stores last 10 related to company as subset).
+- Consumes Units creation and updates (keeps local copies in its own DB and stores last 10 related to company as
+  subset).
 - [OpenApi Documentation](http:localhost:3001/api).
-
 
 ## Units
 
@@ -141,7 +141,6 @@ Provides Units resource (Restful API) and a Kafka Producer/Consumer.
 - Consumes Companies creation and updates (keeps local copies in its own DB)
 - [OpenApi Documentation](http:localhost:3002/api).
 
-
 ## Assets
 
 Provides Assets resource (Restful API) and a Kafka Producer/Consumer.
@@ -150,6 +149,7 @@ Provides Assets resource (Restful API) and a Kafka Producer/Consumer.
 - Produces messages for Assets creation and updates;
 - Consumes Units creation and updates (keeps local copies in its own DB)
 - Consumes Companies creation and updates (keeps local copies in its own DB)
+- [OpenApi Documentation](http:localhost:3003/api).
 
 ## Alerts
 

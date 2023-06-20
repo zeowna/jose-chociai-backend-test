@@ -1,9 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { CreateAssetDto } from './create-asset.dto';
-import { IsDefined, IsString } from 'class-validator';
 
-export class UpdateAssetDto extends PartialType(CreateAssetDto) {
-  @IsDefined()
-  @IsString()
-  name: string;
-}
+export class UpdateAssetDto extends PartialType(CreateAssetDto) {}

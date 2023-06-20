@@ -11,6 +11,7 @@ import {
   AssetUnitDocument,
   AssetUnitSchema,
 } from '../../units/entities/asset-unit.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type AssetDocument = HydratedDocument<Asset>;
 
@@ -28,21 +29,27 @@ export class Asset extends AbstractMongooseEntity {
     this.image = document.image;
   }
 
+  @ApiProperty()
   @Prop({ required: true })
   name: string;
 
+  @ApiProperty()
   @Prop({ required: true })
   description: string;
 
+  @ApiProperty()
   @Prop({ required: true })
   model: string;
 
+  @ApiProperty()
   @Prop({ type: AssetCompanySchema })
   owner: AssetCompany;
 
+  @ApiProperty()
   @Prop({ type: AssetUnitSchema })
   unit: AssetUnit;
 
+  @ApiProperty()
   @Prop({
     type: String,
     enum: Object.values(AssetStatusEnum),
@@ -53,6 +60,7 @@ export class Asset extends AbstractMongooseEntity {
   /**
    * Percentage float goes 0.0 to 1.0
    */
+  @ApiProperty()
   @Prop({
     max: 1,
     min: 0,
@@ -63,6 +71,7 @@ export class Asset extends AbstractMongooseEntity {
   /**
    * TODO: Implement "upload"
    */
+  @ApiProperty()
   @Prop()
   image?: string;
 

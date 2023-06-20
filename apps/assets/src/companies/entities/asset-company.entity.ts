@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractMongooseEntity } from '@zeowna/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { AssetDocument } from '../../assets/entities/asset.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type AssetCompanyDocument = HydratedDocument<AssetDocument>;
 
@@ -17,8 +18,9 @@ export class AssetCompany extends AbstractMongooseEntity {
     this.name = document.name;
   }
 
+  @ApiProperty()
   @Prop()
-  name: string;
+  name?: string;
 }
 
 export const AssetCompanySchema = SchemaFactory.createForClass(AssetCompany);
