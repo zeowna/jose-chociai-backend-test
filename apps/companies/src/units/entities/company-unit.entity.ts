@@ -1,6 +1,7 @@
 import { HydratedDocument } from 'mongoose';
 import { AbstractMongooseEntity } from '@zeowna/mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type CompanyUnitDocument = HydratedDocument<CompanyUnit>;
 
@@ -11,6 +12,7 @@ export class CompanyUnit extends AbstractMongooseEntity {
     this.name = document.name;
   }
 
+  @ApiProperty()
   @Prop()
   name?: string;
 }

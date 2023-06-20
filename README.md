@@ -43,7 +43,13 @@ and [deploy](https://dev.to/yuribenjamin/how-to-deploy-react-app-in-github-pages
 Docker and Docker Compose are required to run the App
 
 ```bash
-$ docker compose up
+$ docker compose up gateway
+```
+
+I suggest that you run Kafka container in another terminal session, because sometimes it freezes out nowhere.
+
+```bash
+$ docker compose up kafka
 ```
 
 ## Technologies used:
@@ -114,7 +120,7 @@ Provides Users and Auth resources (Restful API) and a Kafka Producer.
 - Users CRUD;
 - Auth (signIn);
 - Produces messages for Users creation and updates ;
-- OpenApi Documentation.
+- [OpenApi Documentation](http:localhost:3000/api).
 
 ## Companies
 
@@ -123,6 +129,8 @@ Provides Companies resource (Restful API) and a Kafka Producer/Consumer.
 - Companies CRUD;
 - Produces messages for Companies creation and updates;
 - Consumes Units creation and updates (keeps local copies in its own DB and stores last 10 related to company as subset).
+- [OpenApi Documentation](http:localhost:3001/api).
+
 
 ## Units
 

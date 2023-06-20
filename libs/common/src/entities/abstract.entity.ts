@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export type ID = string | number;
+export type ID = string;
 
 export abstract class AbstractEntity {
-  @ApiProperty()
+  @ApiProperty({ type: String })
   id: ID;
   @ApiProperty()
   createdAt: Date;

@@ -4,6 +4,7 @@ import { useContainer } from 'class-validator';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
 import { PresentAbstractEntityInterceptor } from '@zeowna/common/interceptors/present-abstract-entity-interceptor.service';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,16 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
+
+  const config = new DocumentBuilder()
+    .setTitle('Companies')
+    .setDescription('Companies Service')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 

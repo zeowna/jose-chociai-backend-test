@@ -13,11 +13,21 @@ import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { AuthGuard } from '@zeowna/auth';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Company } from './entities/company.entity';
 
+@ApiTags('Companies')
 @Controller('companies')
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
+  @ApiOkResponse({ type: [Company] })
   @Get()
   async findAll(
     @Query('skip') skip?: string,
@@ -31,16 +41,20 @@ export class CompaniesController {
     );
   }
 
+  @ApiOkResponse({ type: Company })
   @Get(':id')
   async findById(@Param('id') id: string) {
     return this.companiesService.findById(id);
   }
 
+  @ApiCreatedResponse({ type: Company })
   @Post()
   async create(@Body() createUserDto: CreateCompanyDto) {
     return this.companiesService.create(createUserDto);
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Company })
   @Patch(':id')
   @UseGuards(AuthGuard)
   async update(

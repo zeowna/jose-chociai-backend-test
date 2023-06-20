@@ -6,6 +6,7 @@ import {
   CompanyUnitDocument,
   CompanyUnitSchema,
 } from '../../units/entities/company-unit.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type CompanyDocument = HydratedDocument<Company>;
 
@@ -20,9 +21,11 @@ export class Company extends AbstractMongooseEntity {
     );
   }
 
+  @ApiProperty()
   @Prop({ required: true })
   name: string;
 
+  @ApiProperty()
   @Prop({ required: true, unique: true })
   cnpj: string;
 
@@ -30,6 +33,7 @@ export class Company extends AbstractMongooseEntity {
    * Subset Pattern
    * Only 10 last created/updated Units for this Company
    */
+  @ApiProperty({ type: [CompanyUnit] })
   @Prop({ type: [CompanyUnitSchema] })
   units?: CompanyUnit[];
 
