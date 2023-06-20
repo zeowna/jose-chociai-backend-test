@@ -6,7 +6,7 @@ export class AlertNotificationsService {
   constructor(private readonly logger: ConsoleLoggerService) {}
 
   /**
-   * @TODO: Implement notification here
+   * @TODO: Implement Real notification here
    */
   async send(message: string, companyId: string) {
     this.logger.log(`Sending Notification to ${companyId}`);

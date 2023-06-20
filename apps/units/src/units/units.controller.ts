@@ -60,9 +60,6 @@ export class UnitsController {
     return this.unitsService.create(createUnitDto);
   }
 
-  /**
-   * @TODO: Limit this resource by User's Company
-   */
   @ApiBearerAuth()
   @ApiOkResponse({ type: Unit })
   @UseGuards(AuthGuard)

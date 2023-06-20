@@ -13,9 +13,6 @@ import { PlainAsset } from '@zeowna/entities-definition';
 export class AlertsConsumerController {
   constructor(private readonly alertsService: AlertsService) {}
 
-  /**
-   * @TODO: Implement Asset update Health Level update
-   */
   @MessagePattern(TopicsEnum.AssetHealthLevelUpdated)
   async assetHealthLevelUpdated(
     @Payload() message: PlainAsset,

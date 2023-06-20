@@ -71,6 +71,7 @@ export class AssetsService extends AbstractService<
         `Owner and Unit doesn't match owner: ${owner._id} and unit.company._id: ${unit.companyId}`,
       );
     }
+
     createAssetDto.owner = owner
       ? owner
       : new AssetCompany({
