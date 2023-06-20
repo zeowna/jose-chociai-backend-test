@@ -87,7 +87,8 @@
       "^@zeowna/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
       "^@zeowna/kafka(|/.*)$": "<rootDir>/libs/kafka/src/$1",
       "^@zeowna/entities-definition(|/.*)$": "<rootDir>/libs/entities-definition/src/$1",
-      "^@zeowna/mongoose(|/.*)$": "<rootDir>/libs/mongoose/src/$1"
+      "^@zeowna/mongoose(|/.*)$": "<rootDir>/libs/mongoose/src/$1",
+      "^@zeowna/logger(|/.*)$": "<rootDir>/libs/logger/src/$1"
     }
   }
 }

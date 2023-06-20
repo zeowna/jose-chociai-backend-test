@@ -49,6 +49,12 @@
       ],
       "@zeowna/mongoose/*": [
         "libs/mongoose/src/*"
+      ],
+      "@zeowna/logger": [
+        "libs/logger/src"
+      ],
+      "@zeowna/logger/*": [
+        "libs/logger/src/*"
       ]
     }
   }

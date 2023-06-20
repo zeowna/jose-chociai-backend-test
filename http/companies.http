@@ -23,10 +23,10 @@ Content-Type: application/json
 
 ###
 
-PATCH http://localhost:8080/companies/6490b664ef2bec0b08ad7361
+PATCH http://localhost:8080/companies/6490cb22a636f24711907681
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDhmNmExNDlmYjAwMDk0YTM0NWZiYmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ4ZjY5ZGZiZWMzOWNjZjkzZTNmMjkwIiwiaWF0IjoxNjg3MTM3NzM3fQ.GeIAvQivC6gLoH2oxL2IOL8YpM_hUPsol_NrQrfG9oY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzMzczODc2OGIxNzZlOTg0YTkiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MGNiMjJhNjM2ZjI0NzExOTA3NjgxIiwiaWF0IjoxNjg3MjEzMDEwfQ.Xl96S22mD_etxsow2lSsZaT6XS5mume0pM1MlIbhZr4
 
 {
-  "name": "Freios Supremos"
+  "name": "Freios Rivais"
 }

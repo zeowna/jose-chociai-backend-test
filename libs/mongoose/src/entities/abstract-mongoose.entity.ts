@@ -1,17 +1,21 @@
 import { AbstractEntity } from '@zeowna/common/entities/abstract.entity';
 import { Prop } from '@nestjs/mongoose';
-import * as mongoose from 'mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 
 export abstract class AbstractMongooseEntity extends AbstractEntity {
   constructor(document: HydratedDocument<AbstractMongooseEntity>) {
     super(document);
-    this._id = document._id ?? new mongoose.Types.ObjectId(document.id);
-    this.id = this._id.toHexString();
+    if (document._id) {
+      this.id = document._id.toHexString();
+      this._id = document._id;
+    } else if (document.id) {
+      this.id = document.id;
+      this._id = new Types.ObjectId(document.id);
+    }
   }
 
-  _id?: any;
+  _id: Types.ObjectId;
 
   @ApiProperty()
   @Prop()
@@ -21,7 +25,7 @@ export abstract class AbstractMongooseEntity extends AbstractEntity {
   @Prop()
   updatedAt: Date;
 
-  present(): this {
+  present() {
     return {
       ...super.present(),
       _id: undefined,

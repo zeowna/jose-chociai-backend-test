@@ -7,6 +7,10 @@ import { UpdateUnitDto } from './dto/update-unit.dto';
 import { PlainCompanyInterface } from '@zeowna/entities-definition';
 import { KafkaProducer, TopicsEnum } from '@zeowna/kafka';
 import { UnitCompaniesService } from '../companies/unit-companies.service';
+import {
+  UnitCompany,
+  UnitCompanyDocument,
+} from '../companies/entities/unit-company.entity';
 
 @Injectable()
 export class UnitsService extends AbstractService<
@@ -31,10 +35,11 @@ export class UnitsService extends AbstractService<
       createUnitDto.companyId,
     );
 
-    const created = await super.create({
-      ...createUnitDto,
-      company: company ? company : { _id: createUnitDto.companyId },
-    });
+    createUnitDto.company = company
+      ? company
+      : new UnitCompany({ id: createUnitDto.companyId } as UnitCompanyDocument);
+
+    const created = await super.create(createUnitDto);
 
     await this.kafkaProducer.send({
       topic: TopicsEnum.UnitCreated,

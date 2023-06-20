@@ -50,7 +50,7 @@ export abstract class AbstractMongooseRepository<
       await this.mongooseRepositoryImpl
         .findByIdAndUpdate(
           id,
-          { $set: entity },
+          { $set: { ...entity } },
           {
             new: true,
           },

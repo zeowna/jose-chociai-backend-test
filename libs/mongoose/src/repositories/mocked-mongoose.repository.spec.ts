@@ -1,41 +1,28 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MockedMongooseRepository } from './mocked-mongoose.repository';
-import { generateMockedMongooseEntity } from '../entities/generate-mocked-mongoose.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   MockedMongooseEntity,
   MockedMongooseEntityDocument,
   MockedMongooseEntitySchema,
 } from '../entities/mocked-mongoose.entity';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as mongoose from 'mongoose';
-import { MockedMongooseModule } from './mocked-mongoose.module';
+import { disconnect } from 'mongoose';
+import { MockedMongooseFactory } from './mocked-mongoose.module';
+import {
+  assertMockedMongooseEntity,
+  generateMockedMongooseEntity,
+} from '@zeowna/mongoose/repositories/test';
 
-const assertMockedMongooseEntity = (
-  received: MockedMongooseEntity,
-  expected: MockedMongooseEntity,
-  isUpdate = false,
-) => {
-  expect(received._id.toHexString()).toEqual(expected._id.toHexString());
-  expect(received.mutableProp).toEqual(expected.mutableProp);
-  expect(received.createdAt?.toISOString()).toEqual(
-    expected.createdAt?.toISOString(),
-  );
-  if (!isUpdate) {
-    expect(received.updatedAt.toISOString()).toEqual(
-      expected.updatedAt.toISOString(),
-    );
-  }
-};
+const MockedMongooseModule = MockedMongooseFactory.useMongoMemoryServer();
 
 describe('MockedMongooseRepository', () => {
-  let mongod: MongoMemoryServer;
   let repository: MockedMongooseRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        MockedMongooseModule(mongod),
+        MockedMongooseModule.register(),
         MongooseModule.forFeature([
           {
             name: MockedMongooseEntity.name,
@@ -50,9 +37,8 @@ describe('MockedMongooseRepository', () => {
   });
 
   afterAll(async () => {
-    if (mongod) {
-      await mongod.stop();
-    }
+    await disconnect();
+    await MockedMongooseModule.disconnect();
   });
 
   it('should be defined', () => {
@@ -114,17 +100,17 @@ describe('MockedMongooseRepository', () => {
     });
 
     it('should resolve the created MockedEntity', async () => {
-      const created = generateMockedMongooseEntity();
+      const created = generateMockedMongooseEntity({
+        id: new mongoose.Types.ObjectId().toHexString(),
+      });
       const result = await repository.create(created);
+      const expected = generateMockedMongooseEntity({
+        ...created,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+      } as MockedMongooseEntityDocument);
 
-      assertMockedMongooseEntity(
-        result,
-        new MockedMongooseEntity({
-          ...created,
-          createdAt: result.createdAt,
-          updatedAt: result.updatedAt,
-        } as MockedMongooseEntityDocument),
-      );
+      assertMockedMongooseEntity(result, expected);
     });
   });
 
@@ -145,10 +131,10 @@ describe('MockedMongooseRepository', () => {
     it('should resolve the updated MockedEntity', async () => {
       const created = await repository.create(generateMockedMongooseEntity());
 
-      const updated = {
+      const updated = new MockedMongooseEntity({
         ...created,
         mutableProp: 'another_string',
-      };
+      } as MockedMongooseEntityDocument);
 
       const result = await repository.update(created.id, updated);
 
@@ -185,18 +171,20 @@ describe('MockedMongooseRepository', () => {
     });
 
     it('should resolve a created MockedEntity', async () => {
-      const created = generateMockedMongooseEntity();
-      const result = await repository.createOrUpdate({ ...created });
+      const created = generateMockedMongooseEntity({
+        id: new mongoose.Types.ObjectId().toHexString(),
+      });
+      const result = await repository.createOrUpdate(created);
 
       assertMockedMongooseEntity(result, created);
     });
 
     it('should resolve a updated MockedEntity', async () => {
       const existing = await repository.create(generateMockedMongooseEntity());
-      const updated = {
+      const updated = generateMockedMongooseEntity({
         ...existing,
         mutableProp: 'another_string',
-      };
+      });
 
       const result = await repository.createOrUpdate(updated);
       assertMockedMongooseEntity(result, updated, true);

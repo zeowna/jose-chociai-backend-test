@@ -3,7 +3,8 @@ import { AbstractMongooseRepository } from '@zeowna/mongoose';
 import { Company, CompanyDocument } from './entities/company.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PlainUnitInterface } from '@zeowna/entities-definition';
+import { CompanyUnit } from '../units/entities/company-unit.entity';
+import { ID } from '@zeowna/common';
 
 @Injectable()
 export class CompaniesMongooseRepository extends AbstractMongooseRepository<Company> {
@@ -13,11 +14,11 @@ export class CompaniesMongooseRepository extends AbstractMongooseRepository<Comp
     super(repository, Company);
   }
 
-  async updateCompanyUnit(unit: PlainUnitInterface) {
-    await this.repository.updateOne(
-      { _id: unit.company.id },
-      { $addToSet: { units: unit } },
-    );
+  async updateCompanyUnits(id: ID, units: CompanyUnit[]) {
+    await this.repository
+      .updateOne({ _id: id }, { $set: { units } })
+      .lean()
+      .exec();
   }
 
   async findByCnpj(cnpj: string) {

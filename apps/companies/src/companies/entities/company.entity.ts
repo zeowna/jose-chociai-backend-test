@@ -26,6 +26,10 @@ export class Company extends AbstractMongooseEntity {
   @Prop({ required: true, unique: true })
   cnpj: string;
 
+  /**
+   * Subset Pattern
+   * Only 10 last created/updated Units for this Company
+   */
   @Prop({ type: [CompanyUnitSchema] })
   units?: CompanyUnit[];
 

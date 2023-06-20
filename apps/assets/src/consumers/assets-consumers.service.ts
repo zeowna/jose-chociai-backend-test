@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AssetsService } from '../assets/assets.service';
 import { AssetCompaniesService } from '../companies/asset-companies.service';
 import {
@@ -15,6 +15,7 @@ import {
   AssetUnit,
   AssetUnitDocument,
 } from '../units/entities/asset-unit.entity';
+import { NestLoggerService } from '@zeowna/logger';
 
 @Injectable()
 export class AssetsConsumersService {
@@ -22,20 +23,23 @@ export class AssetsConsumersService {
     private readonly assetsService: AssetsService,
     private readonly companiesService: AssetCompaniesService,
     private readonly unitService: AssetUnitsService,
+    private readonly logger: NestLoggerService,
   ) {}
 
   async companyCreatedConsumer(
     company: PlainCompanyInterface,
     context: KafkaContext,
   ) {
-    try {
-      console.log(context.getTopic(), company);
+    const topic = context.getTopic();
 
+    try {
+      this.logger.log(topic, company, 'started');
       await this.companiesService.createOrUpdate(
         new AssetCompany(company as unknown as AssetCompanyDocument),
       );
+      this.logger.log(topic, company, 'completed');
     } catch (err) {
-      Logger.error(err);
+      this.logger.error(topic, company, err, 'error');
     }
   }
 
@@ -43,17 +47,21 @@ export class AssetsConsumersService {
     company: PlainCompanyInterface,
     context: KafkaContext,
   ) {
+    const topic = context.getTopic();
+
     try {
       await this.companyCreatedConsumer(company, context);
       await this.assetsService.updateAssetCompany(company);
     } catch (err) {
-      Logger.error(err);
+      this.logger.error(topic, company, err, 'error');
     }
   }
 
   async unitCreatedConsumer(unit: PlainUnitInterface, context: KafkaContext) {
+    const topic = context.getTopic();
+
     try {
-      console.log(context.getTopic(), unit);
+      this.logger.log(topic, unit, 'started');
 
       await this.unitService.createOrUpdate(
         new AssetUnit({
@@ -61,17 +69,20 @@ export class AssetsConsumersService {
           companyId: unit.company.id as string,
         } as unknown as AssetUnitDocument),
       );
+      this.logger.log(topic, unit, 'completed');
     } catch (err) {
-      Logger.error(err);
+      this.logger.error(topic, unit, err, 'error');
     }
   }
 
   async unitUpdatedConsumer(unit: PlainUnitInterface, context: KafkaContext) {
+    const topic = context.getTopic();
+
     try {
       await this.unitCreatedConsumer(unit, context);
       await this.assetsService.updateAssetUnit(unit);
     } catch (err) {
-      Logger.error(err);
+      this.logger.error(topic, unit, err, 'error');
     }
   }
 }

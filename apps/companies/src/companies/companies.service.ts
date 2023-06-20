@@ -6,6 +6,10 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { PlainUnitInterface } from '@zeowna/entities-definition';
 import { KafkaProducer, TopicsEnum } from '@zeowna/kafka';
+import {
+  CompanyUnit,
+  CompanyUnitDocument,
+} from '../units/entities/company-unit.entity';
 
 @Injectable()
 export class CompaniesService extends AbstractService<
@@ -52,8 +56,26 @@ export class CompaniesService extends AbstractService<
     return updated;
   }
 
-  async updateCompanyUnit(unit: PlainUnitInterface) {
-    await this.companiesRepository.updateCompanyUnit(unit);
+  async updateCompanyUnits(unit: PlainUnitInterface, maxUnits = 10) {
+    const found = await this.companiesRepository.findById(unit.company.id);
+
+    if (!found) {
+      return;
+    }
+
+    const units = found.units.filter(
+      ({ _id }) => _id.toHexString() !== unit.id,
+    );
+
+    units.push(new CompanyUnit(unit as unknown as CompanyUnitDocument));
+
+    const index = units.length > maxUnits ? units.length - maxUnits : 0;
+    const selected = units.splice(index, maxUnits);
+
+    await this.companiesRepository.updateCompanyUnits(
+      unit.company.id,
+      selected,
+    );
   }
 
   async findByCnpj(cnpj: string) {
