@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { AbstractService } from '@zeowna/common';
-import { Unit } from './entities/unit.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { AbstractService, ID } from '@zeowna/common';
+import { Unit, UnitDocument } from './entities/unit.entity';
 import { UnitsMongooseRepository } from './units-mongoose.repository';
 import { CreateUnitDto } from './dto/create-unit.dto';
 import { UpdateUnitDto } from './dto/update-unit.dto';
@@ -27,7 +27,16 @@ export class UnitsService extends AbstractService<
   }
 
   async findByIdAndCompanyId(id: string, companyId: string) {
-    return this.unitsRepository.findByIdAndCompanyId(id, companyId);
+    const found = await this.unitsRepository.findByIdAndCompanyId(
+      id,
+      companyId,
+    );
+
+    if (!found) {
+      throw new NotFoundException(`Unit not found with id: ${id}`);
+    }
+
+    return found;
   }
 
   async create(createUnitDto: CreateUnitDto) {
@@ -54,8 +63,15 @@ export class UnitsService extends AbstractService<
     return created;
   }
 
-  async update(id: string, updateUnitDto: UpdateUnitDto) {
-    const updated = await super.update(id, updateUnitDto);
+  async updateByCompanyId(id: ID, companyId: ID, updateUnitDto: UpdateUnitDto) {
+    const found = await this.findByIdAndCompanyId(id, companyId);
+
+    const updated = await this.unitsRepository.update(
+      found.id,
+      updateUnitDto as UnitDocument,
+    );
+
+    console.log({ updated });
 
     await this.kafkaProducer.send({
       topic: TopicsEnum.UnitUpdated,

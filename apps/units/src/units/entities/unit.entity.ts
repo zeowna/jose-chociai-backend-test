@@ -6,6 +6,7 @@ import {
   UnitCompanyDocument,
   UnitCompanySchema,
 } from '../../companies/entities/unit-company.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 export type UnitDocument = HydratedDocument<Unit>;
 
@@ -17,11 +18,13 @@ export class Unit extends AbstractMongooseEntity {
     this.company = new UnitCompany(document.company as UnitCompanyDocument);
   }
 
+  @ApiProperty()
   @Prop()
   name: string;
 
+  @ApiProperty()
   @Prop({ type: UnitCompanySchema })
-  company: Partial<UnitCompany>;
+  company: UnitCompany;
 
   present(): this {
     return { ...super.present(), company: this?.company?.present() };

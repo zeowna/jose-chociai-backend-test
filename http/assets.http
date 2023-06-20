@@ -3,7 +3,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzM
 
 ###
 GET http://localhost:8080/assets/648f9522f2e562c6f6ad23dc
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzMzczODc2OGIxNzZlOTg0YTkiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MGNiMjJhNjM2ZjI0NzExOTA3NjgxIiwiaWF0IjoxNjg3MjEwODA2fQ.8ot6UL2EGsiND8T--cVt8K67FcMoL0LjN_0b-pdQbHs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxMTBjMTliNzJkMjk0ZGNlM2Y0NmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MTEwMzNhMWY2NGQ0NTZmMGI5ODJlIiwiaWF0IjoxNjg3MjI4NjE0fQ.kni7HyGjN0FasCR-2ekXM3QRJ4-UuGKyZzQmJiR0PcI
 
 
 ###
@@ -11,14 +11,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzM
 
 POST http://localhost:8080/assets
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzMzczODc2OGIxNzZlOTg0YTkiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MGNiMjJhNjM2ZjI0NzExOTA3NjgxIiwiaWF0IjoxNjg3MjEwODA2fQ.8ot6UL2EGsiND8T--cVt8K67FcMoL0LjN_0b-pdQbHs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxMTBjMTliNzJkMjk0ZGNlM2Y0NmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MTEwMzNhMWY2NGQ0NTZmMGI5ODJlIiwiaWF0IjoxNjg3MjI4NjE0fQ.kni7HyGjN0FasCR-2ekXM3QRJ4-UuGKyZzQmJiR0PcI
 
 
 {
   "name": "Máquina de fazer freio",
   "description": "Faz freios",
   "model": "1234213",
-  "unitId": "6490cb4c68de1cf5da5d1f16",
+  "unitId": "649110e398e16d0a203bcbc2",
   "health": 0.5
 }
 
@@ -26,7 +26,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzM
 
 PATCH http://localhost:8080/assets/6490cb651eb8531c398aed09/healthLevel
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzMzczODc2OGIxNzZlOTg0YTkiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MGNiMjJhNjM2ZjI0NzExOTA3NjgxIiwiaWF0IjoxNjg3MjEwODA2fQ.8ot6UL2EGsiND8T--cVt8K67FcMoL0LjN_0b-pdQbHs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxMTBjMTliNzJkMjk0ZGNlM2Y0NmEiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MTEwMzNhMWY2NGQ0NTZmMGI5ODJlIiwiaWF0IjoxNjg3MjI4NjE0fQ.kni7HyGjN0FasCR-2ekXM3QRJ4-UuGKyZzQmJiR0PcI
 
 {
   "healthLevel": 0.96

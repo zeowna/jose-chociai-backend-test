@@ -23,7 +23,7 @@ Content-Type: application/json
 
 ###
 
-PATCH http://localhost:8080/companies/6490cb22a636f24711907681
+PATCH http://localhost:8080/companies/64911033a1f64d456f0b982e
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkwY2IzMzczODc2OGIxNzZlOTg0YTkiLCJ1c2VybmFtZSI6Impvc2VsdWNhc2Nob2NpYWlAZ21haWwuY29tIiwiY29tcGFueUlkIjoiNjQ5MGNiMjJhNjM2ZjI0NzExOTA3NjgxIiwiaWF0IjoxNjg3MjEzMDEwfQ.Xl96S22mD_etxsow2lSsZaT6XS5mume0pM1MlIbhZr4
 

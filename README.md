@@ -139,6 +139,8 @@ Provides Units resource (Restful API) and a Kafka Producer/Consumer.
 - Units CRUD;
 - Produces messages for Units creation and updates;
 - Consumes Companies creation and updates (keeps local copies in its own DB)
+- [OpenApi Documentation](http:localhost:3002/api).
+
 
 ## Assets
 

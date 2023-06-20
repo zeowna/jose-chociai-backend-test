@@ -64,6 +64,8 @@ export class CompaniesController {
     return this.companiesService.update(id, updateUserDto);
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: Company })
   @Delete(':id')
   @UseGuards(AuthGuard)
   async remove(@Param('id') id: string) {
