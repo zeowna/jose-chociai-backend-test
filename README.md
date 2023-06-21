@@ -77,7 +77,7 @@ All basic stuff:
 - ServiceInterface and AbstractService;
 - RepositoryInterface;
 - Types
-- Interceptors (Presenter)
+- Interceptors (Presenter, GenerateCorrelationId)
 
 ### @zeowna/mongoose
 
@@ -164,3 +164,12 @@ Provides Kafka Consumer.
 - Soft Delete;
 - An Auth Service outside Users service (Role Based);
 - A Redis Cache to Store Auth Tokens and Expirations.
+
+## Entity Creation Flux
+
+1. Create a Company;
+2. Create a User (cpf and email are unique) passing a CompanyId;
+3. SignUp in order to get the Bearer Authentication Token;
+4. Create a Unit, add the Bearer Token in Headers, the Unit will be created for User's Company;
+5. Create Asset, add the Bearer Token in Headers, passing UnitId;
+6. Update Asset healthLevel, specific route for a specific flux. 
