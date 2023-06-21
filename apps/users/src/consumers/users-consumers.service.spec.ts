@@ -80,6 +80,7 @@ describe('UsersConsumersService', () => {
     it('should create or update a UserCompany', async () => {
       const company: PlainCompany = {
         id: new mongoose.Types.ObjectId().toHexString(),
+        cnpj: 'any_string',
         name: 'Company Name',
         createdAt: new Date(),
         updatedAt: new Date(),

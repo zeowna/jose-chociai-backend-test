@@ -25,24 +25,33 @@ export class AssetsConsumersService {
 
   async companyCreatedConsumer(company: PlainCompany, context: KafkaContext) {
     const topic = context.getTopic();
+    const {
+      headers: { correlationId },
+    } = context.getMessage();
 
     try {
-      this.logger.log(topic, company, 'started');
+      this.logger.log(topic, { correlationId, company });
       await this.companiesService.createOrUpdate(
         new AssetCompany(company as unknown as AssetCompanyDocument),
       );
-      this.logger.log(topic, company, 'completed');
+      this.logger.log(topic, { correlationId, company });
     } catch (err) {
-      this.logger.error(topic, company, err, 'error');
+      this.logger.error(topic, { correlationId, company, err });
     }
   }
 
   async companyUpdateConsumer(company: PlainCompany, context: KafkaContext) {
     const topic = context.getTopic();
+    const {
+      headers: { correlationId },
+    } = context.getMessage();
 
     try {
       await this.companyCreatedConsumer(company, context);
-      await this.assetsService.updateAssetCompany(company);
+      await this.assetsService.updateAssetCompany(
+        company,
+        correlationId as string,
+      );
     } catch (err) {
       this.logger.error(topic, company, err, 'error');
     }
@@ -50,9 +59,12 @@ export class AssetsConsumersService {
 
   async unitCreatedConsumer(unit: PlainUnitInterface, context: KafkaContext) {
     const topic = context.getTopic();
+    const {
+      headers: { correlationId },
+    } = context.getMessage();
 
     try {
-      this.logger.log(topic, unit, 'started');
+      this.logger.log(topic, { correlationId, unit });
 
       await this.unitService.createOrUpdate(
         new AssetUnit({
@@ -60,20 +72,23 @@ export class AssetsConsumersService {
           companyId: unit.company.id as string,
         } as unknown as AssetUnitDocument),
       );
-      this.logger.log(topic, unit, 'completed');
+      this.logger.log(topic, { correlationId, unit });
     } catch (err) {
-      this.logger.error(topic, unit, err, 'error');
+      this.logger.error(topic, { correlationId, unit, err });
     }
   }
 
   async unitUpdatedConsumer(unit: PlainUnitInterface, context: KafkaContext) {
     const topic = context.getTopic();
+    const {
+      headers: { correlationId },
+    } = context.getMessage();
 
     try {
       await this.unitCreatedConsumer(unit, context);
       await this.assetsService.updateAssetUnit(unit);
     } catch (err) {
-      this.logger.error(topic, unit, err, 'error');
+      this.logger.error(topic, { correlationId, unit, err });
     }
   }
 }

@@ -10,6 +10,7 @@ import {
   CompanyUnit,
   CompanyUnitDocument,
 } from '../units/entities/company-unit.entity';
+import { NestLoggerService } from '@zeowna/logger';
 
 @Injectable()
 export class CompaniesService extends AbstractService<
@@ -20,12 +21,17 @@ export class CompaniesService extends AbstractService<
   constructor(
     private readonly companiesRepository: CompaniesMongooseRepository,
     private readonly kafkaProducer: KafkaProducer,
+    private readonly logger: NestLoggerService,
   ) {
-    super(companiesRepository);
+    super(companiesRepository, logger);
   }
 
-  async create(createEntityDto: CreateCompanyDto) {
-    const created = await super.create(createEntityDto);
+  async create(createEntityDto: CreateCompanyDto, correlationId: string) {
+    this.logger.info('CompaniesService.create()', {
+      createEntityDto,
+      correlationId,
+    });
+    const created = await super.create(createEntityDto, correlationId);
 
     await this.kafkaProducer.send({
       topic: TopicsEnum.CompanyCreated,
@@ -33,6 +39,9 @@ export class CompaniesService extends AbstractService<
         {
           key: TopicsEnum.CompanyCreated,
           value: JSON.stringify(created.present()),
+          headers: {
+            correlationId,
+          },
         },
       ],
     });
@@ -40,8 +49,16 @@ export class CompaniesService extends AbstractService<
     return created;
   }
 
-  async update(id: any, updateEntityDto: UpdateCompanyDto) {
-    const updated = await super.update(id, updateEntityDto);
+  async update(
+    id: any,
+    updateEntityDto: UpdateCompanyDto,
+    correlationId: string,
+  ) {
+    this.logger.info('CompaniesService.update()', {
+      updateEntityDto,
+      correlationId,
+    });
+    const updated = await super.update(id, updateEntityDto, correlationId);
 
     await this.kafkaProducer.send({
       topic: TopicsEnum.CompanyUpdated,
@@ -56,7 +73,17 @@ export class CompaniesService extends AbstractService<
     return updated;
   }
 
-  async updateCompanyUnits(unit: PlainUnitInterface, maxUnits = 10) {
+  async updateCompanyUnits(
+    unit: PlainUnitInterface,
+    correlationId: string,
+    maxUnits = 10,
+  ) {
+    this.logger.info('CompaniesService.updateCompanyUnits()', {
+      unit,
+      maxUnits,
+      correlationId,
+    });
+
     const found = await this.companiesRepository.findById(unit.company.id);
 
     if (!found) {
@@ -72,13 +99,24 @@ export class CompaniesService extends AbstractService<
     const index = units.length > maxUnits ? units.length - maxUnits : 0;
     const selected = units.splice(index, maxUnits);
 
+    this.logger.info('pushing CompanyUnits into Company', {
+      units: selected,
+      company: found,
+      correlationId,
+    });
+
     await this.companiesRepository.updateCompanyUnits(
       unit.company.id,
       selected,
     );
   }
 
-  async findByCnpj(cnpj: string) {
+  async findByCnpj(cnpj: string, correlationId: string) {
+    this.logger.info('CompaniesService.findByCnpj()', {
+      cnpj,
+      correlationId,
+    });
+
     return this.companiesRepository.findByCnpj(cnpj);
   }
 }

@@ -6,6 +6,11 @@ import { CompaniesConsumerModule } from './consumers/companies-consumer.module';
 import { ZeownaAuthModule } from '@zeowna/auth';
 import { jwtConstants } from '@zeowna/auth/constants';
 import { ZeownaLoggerModule } from '@zeowna/logger';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import {
+  GenerateCorrelationIdInterceptor,
+  PresentAbstractEntityInterceptor,
+} from '@zeowna/common';
 
 @Module({
   imports: [
@@ -20,6 +25,10 @@ import { ZeownaLoggerModule } from '@zeowna/logger';
     CompaniesModule,
     CompanyUnitsModule,
     CompaniesConsumerModule,
+  ],
+  providers: [
+    { provide: APP_INTERCEPTOR, useClass: PresentAbstractEntityInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: GenerateCorrelationIdInterceptor },
   ],
 })
 export class AppModule {}

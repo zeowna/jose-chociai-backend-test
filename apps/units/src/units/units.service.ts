@@ -11,6 +11,7 @@ import {
   UnitCompany,
   UnitCompanyDocument,
 } from '../companies/entities/unit-company.entity';
+import { NestLoggerService } from '@zeowna/logger';
 
 @Injectable()
 export class UnitsService extends AbstractService<
@@ -22,11 +23,22 @@ export class UnitsService extends AbstractService<
     private readonly unitsRepository: UnitsMongooseRepository,
     private readonly companiesService: UnitCompaniesService,
     private readonly kafkaProducer: KafkaProducer,
+    private readonly logger: NestLoggerService,
   ) {
-    super(unitsRepository);
+    super(unitsRepository, logger);
   }
 
-  async findByIdAndCompanyId(id: string, companyId: string) {
+  async findByIdAndCompanyId(
+    id: string,
+    companyId: string,
+    correlationId: string,
+  ) {
+    this.logger.info('UnitsService.findByIdAndCompanyId()', {
+      id,
+      companyId,
+      correlationId,
+    });
+
     const found = await this.unitsRepository.findByIdAndCompanyId(
       id,
       companyId,
@@ -39,7 +51,12 @@ export class UnitsService extends AbstractService<
     return found;
   }
 
-  async create(createUnitDto: CreateUnitDto) {
+  async create(createUnitDto: CreateUnitDto, correlationId: string) {
+    this.logger.info('UnitsService.create()', {
+      createUnitDto,
+      correlationId,
+    });
+
     const company = await this.companiesService.findById(
       createUnitDto.companyId,
     );
@@ -48,7 +65,7 @@ export class UnitsService extends AbstractService<
       ? company
       : new UnitCompany({ id: createUnitDto.companyId } as UnitCompanyDocument);
 
-    const created = await super.create(createUnitDto);
+    const created = await super.create(createUnitDto, correlationId);
 
     await this.kafkaProducer.send({
       topic: TopicsEnum.UnitCreated,
@@ -56,6 +73,7 @@ export class UnitsService extends AbstractService<
         {
           key: TopicsEnum.UnitCreated,
           value: JSON.stringify(created.present()),
+          headers: { correlationId },
         },
       ],
     });
@@ -63,15 +81,25 @@ export class UnitsService extends AbstractService<
     return created;
   }
 
-  async updateByCompanyId(id: ID, companyId: ID, updateUnitDto: UpdateUnitDto) {
-    const found = await this.findByIdAndCompanyId(id, companyId);
+  async updateByCompanyId(
+    id: ID,
+    companyId: ID,
+    updateUnitDto: UpdateUnitDto,
+    correlationId: string,
+  ) {
+    this.logger.info('UnitsService.updateByCompanyId()', {
+      id,
+      companyId,
+      updateUnitDto,
+      correlationId,
+    });
+
+    const found = await this.findByIdAndCompanyId(id, companyId, correlationId);
 
     const updated = await this.unitsRepository.update(
       found.id,
       updateUnitDto as UnitDocument,
     );
-
-    console.log({ updated });
 
     await this.kafkaProducer.send({
       topic: TopicsEnum.UnitUpdated,
@@ -79,6 +107,7 @@ export class UnitsService extends AbstractService<
         {
           key: TopicsEnum.UnitUpdated,
           value: JSON.stringify(updated.present()),
+          headers: { correlationId },
         },
       ],
     });
@@ -86,7 +115,12 @@ export class UnitsService extends AbstractService<
     return updated;
   }
 
-  async updateUnitCompany(company: PlainCompany) {
+  async updateUnitCompany(company: PlainCompany, correlationId: string) {
+    this.logger.info('UnitsService.updateUnitCompany()', {
+      company,
+      correlationId,
+    });
+
     await this.unitsRepository.updateUnitCompany(company);
   }
 }

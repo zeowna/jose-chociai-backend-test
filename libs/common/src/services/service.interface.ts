@@ -1,4 +1,4 @@
-import { AbstractEntity } from '@zeowna/common/entities/abstract.entity';
+import { AbstractEntity, ID } from '@zeowna/common/entities/abstract.entity';
 import { SortParams } from '@zeowna/common';
 
 export interface ServiceInterface<
@@ -6,15 +6,27 @@ export interface ServiceInterface<
   CreateEntityDto,
   UpdateEntityDto,
 > {
-  findAll(skip?: number, limit?: number, sort?: SortParams): Promise<T[]>;
+  findAll(
+    skip: number,
+    limit: number,
+    sort: SortParams,
+    correlationId: string,
+  ): Promise<T[]>;
 
-  findById(id: any): Promise<T>;
+  findById(id: ID, correlationId: string): Promise<T>;
 
-  create(createEntityDto: CreateEntityDto): Promise<T>;
+  create(createEntityDto: CreateEntityDto, correlationId: string): Promise<T>;
 
-  update(id: any, updateEntityDto: UpdateEntityDto): Promise<T>;
+  update(
+    id: any,
+    updateEntityDto: UpdateEntityDto,
+    correlationId: string,
+  ): Promise<T>;
 
-  remove(id: any): Promise<T>;
+  remove(id: ID, correlationId: string): Promise<T>;
 
-  createOrUpdate(createEntityDto: CreateEntityDto): Promise<T>;
+  createOrUpdate(
+    createEntityDto: CreateEntityDto,
+    correlationId: string,
+  ): Promise<T>;
 }

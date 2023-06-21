@@ -24,7 +24,8 @@ export class UsersConsumerController {
   @MessagePattern(TopicsEnum.CompanyUpdated)
   async companyUpdatedConsumer(
     @Payload() message: PlainCompany,
-    @Ctx() context: KafkaContext,
+    @Ctx()
+    context: KafkaContext,
   ) {
     await this.consumersService.companyUpdatedConsumer(message, context);
   }

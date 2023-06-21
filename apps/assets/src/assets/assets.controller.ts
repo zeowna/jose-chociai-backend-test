@@ -34,16 +34,17 @@ export class AssetsController {
   @Get()
   @UseGuards(AuthGuard)
   async findAll(
-    @Req() { user }: CustomRequest,
+    @Req() { user, correlationId }: CustomRequest,
     @Query('skip') skip?: string,
     @Query('limit') limit?: string,
     @Query('sort') sort?: string,
   ) {
     return this.assetsService.findAllByOwnerId(
       user.companyId,
-      +skip,
-      +limit,
+      skip ? +skip : undefined,
+      limit ? +limit : undefined,
       sort ? JSON.parse(sort) : undefined,
+      correlationId,
     );
   }
 
@@ -51,8 +52,15 @@ export class AssetsController {
   @ApiOkResponse({ type: [Asset] })
   @Get(':id')
   @UseGuards(AuthGuard)
-  async findById(@Req() { user }: CustomRequest, @Param('id') id: string) {
-    return this.assetsService.findByIdAndOwnerId(id, user.companyId);
+  async findById(
+    @Req() { user, correlationId }: CustomRequest,
+    @Param('id') id: string,
+  ) {
+    return this.assetsService.findByIdAndOwnerId(
+      id,
+      user.companyId,
+      correlationId,
+    );
   }
 
   @ApiBearerAuth()
@@ -60,11 +68,11 @@ export class AssetsController {
   @Post()
   @UseGuards(AuthGuard)
   async create(
-    @Req() { user }: CustomRequest,
+    @Req() { user, correlationId }: CustomRequest,
     @Body() createAssetDto: CreateAssetDto,
   ) {
     createAssetDto.ownerId = user.companyId;
-    return this.assetsService.create(createAssetDto);
+    return this.assetsService.create(createAssetDto, correlationId);
   }
 
   @ApiBearerAuth()
@@ -72,18 +80,19 @@ export class AssetsController {
   @Patch(':id')
   @UseGuards(AuthGuard)
   async update(
+    @Req() request: CustomRequest,
     @Param('id') id: string,
     @Body() updateAssetDto: UpdateAssetDto,
   ) {
-    return this.assetsService.update(id, updateAssetDto);
+    return this.assetsService.update(id, updateAssetDto, request.correlationId);
   }
 
   @ApiBearerAuth()
   @ApiOkResponse({ type: Asset })
   @Delete(':id')
   @UseGuards(AuthGuard)
-  async remove(@Param('id') id: string) {
-    return this.assetsService.remove(id);
+  async remove(@Req() request: CustomRequest, @Param('id') id: string) {
+    return this.assetsService.remove(id, request.correlationId);
   }
 
   @ApiBearerAuth()
@@ -92,13 +101,14 @@ export class AssetsController {
   @UseGuards(AuthGuard)
   async updateHealthLevel(
     @Param('id') id: string,
-    @Req() { user }: CustomRequest,
+    @Req() { user, correlationId }: CustomRequest,
     @Body() updateAssetHealthLevelDto: UpdateAssetHealthLevelDto,
   ) {
     return this.assetsService.updateHealthLevel(
       id,
       user.companyId,
       updateAssetHealthLevelDto,
+      correlationId,
     );
   }
 }

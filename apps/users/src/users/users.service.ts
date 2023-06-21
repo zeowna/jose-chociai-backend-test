@@ -12,6 +12,7 @@ import {
   UserCompany,
   UserCompanyDocument,
 } from '../companies/entities/user-company.entity';
+import { NestLoggerService } from '@zeowna/logger';
 
 @Injectable()
 export class UsersService extends AbstractService<
@@ -23,22 +24,32 @@ export class UsersService extends AbstractService<
     private readonly repository: UserMongooseRepository,
     private readonly companiesService: UserCompaniesService,
     private readonly hashService: BcryptHashService,
+    private readonly logger: NestLoggerService,
   ) {
-    super(repository);
+    super(repository, logger);
   }
 
   async findByCpf(cpf: string) {
+    this.logger.info('UsersService.findByCpf()', { cpf });
     return this.repository.findByCpf(cpf);
   }
 
   async findByEmail(email: string) {
+    this.logger.info('UsersService.findByEmail()', { email });
     return this.repository.findByEmail(email);
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, correlationId: string) {
+    this.logger.info(`UsersService.create()`, {
+      createUserDto,
+      correlationId,
+    });
+
     const company = await this.companiesService.findById(
       createUserDto.companyId,
     );
+
+    this.logger.info('Will attach UserCompany', { createUserDto, company });
 
     return super.create({
       ...createUserDto,
@@ -54,7 +65,14 @@ export class UsersService extends AbstractService<
   async updatePassword(
     id: string,
     updateUserPasswordDto: UpdateUserPasswordDto,
+    correlationId: string,
   ) {
+    this.logger.info('UsersService.updatePassword()', {
+      id,
+      updateUserPasswordDto,
+      correlationId,
+    });
+
     const existing = await super.findById(id);
 
     return this.repository.updatePassword(
@@ -63,7 +81,12 @@ export class UsersService extends AbstractService<
     );
   }
 
-  async updateUserCompany(company: PlainCompany) {
+  async updateUserCompany(company: PlainCompany, correlationId: string) {
+    this.logger.info('UsersService.updateUserCompany()', {
+      company,
+      correlationId,
+    });
+
     return this.repository.updateUserCompany(company);
   }
 }

@@ -13,9 +13,12 @@ export class AlertsService {
 
   async assetHealthLevelUpdated(asset: PlainAsset, context: KafkaContext) {
     const topic = context.getTopic();
+    const {
+      headers: { correlationId },
+    } = context.getMessage();
 
     try {
-      this.logger.log(topic, asset, 'started');
+      this.logger.log(topic, { correlationId, asset });
 
       await this.notificationService.send(
         `${asset.unit.id} - ${asset.unit.name} | ${asset.id} - ${
@@ -25,9 +28,9 @@ export class AlertsService {
         }`,
         asset.owner.id as string,
       );
-      this.logger.log(topic, asset, 'completed');
+      this.logger.log(topic, asset);
     } catch (err) {
-      this.logger.error(topic, asset, 'error', err);
+      this.logger.error(topic, { correlationId, asset, err });
     }
   }
 }

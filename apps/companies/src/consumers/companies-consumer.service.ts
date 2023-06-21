@@ -19,16 +19,22 @@ export class CompaniesConsumerService {
 
   async unitCreatedConsumer(unit: PlainUnitInterface, context: KafkaContext) {
     const topic = context.getTopic();
+    const {
+      headers: { correlationId },
+    } = context.getMessage();
 
     try {
-      this.logger.log(topic, unit, 'started');
+      this.logger.log(topic, { correlationId, unit });
       await this.unitsService.createOrUpdate(
         new CompanyUnit(unit as unknown as CompanyUnitDocument),
       );
-      await this.companiesService.updateCompanyUnits(unit);
-      this.logger.log(topic, unit, 'completed');
+      await this.companiesService.updateCompanyUnits(
+        unit,
+        correlationId as string,
+      );
+      this.logger.log(topic, { correlationId, unit });
     } catch (err) {
-      this.logger.error(topic, unit, err, 'error');
+      this.logger.error(topic, { correlationId, unit, err });
     }
   }
 

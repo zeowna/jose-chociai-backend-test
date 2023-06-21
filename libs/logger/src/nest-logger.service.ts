@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { LoggerInterface } from '@zeowna/logger/logger.interface';
+import { LoggerInterface } from '@zeowna/common';
 
 @Injectable()
 export class NestLoggerService implements LoggerInterface {
@@ -8,7 +8,7 @@ export class NestLoggerService implements LoggerInterface {
   }
 
   info(message: string, ...args: any[]) {
-    Logger.verbose(message, ...args);
+    Logger.log(message, ...args);
   }
 
   log(message: string, ...args: any[]) {

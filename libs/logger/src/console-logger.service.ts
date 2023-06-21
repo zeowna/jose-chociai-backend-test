@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LoggerInterface } from '@zeowna/logger/logger.interface';
+import { LoggerInterface } from '@zeowna/common';
 
 @Injectable()
 export class ConsoleLoggerService implements LoggerInterface {

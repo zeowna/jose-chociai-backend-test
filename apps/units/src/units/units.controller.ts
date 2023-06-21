@@ -31,21 +31,23 @@ export class UnitsController {
   @ApiOkResponse({ type: Unit })
   @Get()
   async findAll(
+    @Req() request: CustomRequest,
     @Query('skip') skip?: string,
     @Query('limit') limit?: string,
     @Query('sort') sort?: string,
   ) {
     return this.unitsService.findAll(
-      +skip,
-      +limit,
+      skip ? +skip : undefined,
+      limit ? +limit : undefined,
       sort ? JSON.parse(sort) : undefined,
+      request.correlationId,
     );
   }
 
   @ApiOkResponse({ type: Unit })
   @Get(':id')
-  async findById(@Param('id') id: string) {
-    return this.unitsService.findById(id);
+  async findById(@Req() request: CustomRequest, @Param('id') id: string) {
+    return this.unitsService.findById(id, request.correlationId);
   }
 
   @ApiBearerAuth()
@@ -53,11 +55,11 @@ export class UnitsController {
   @Post()
   @UseGuards(AuthGuard)
   async create(
-    @Req() { user }: CustomRequest,
+    @Req() { user, correlationId }: CustomRequest,
     @Body() createUnitDto: CreateUnitDto,
   ) {
     createUnitDto.companyId = user.companyId;
-    return this.unitsService.create(createUnitDto);
+    return this.unitsService.create(createUnitDto, correlationId);
   }
 
   @ApiBearerAuth()
@@ -65,7 +67,7 @@ export class UnitsController {
   @UseGuards(AuthGuard)
   @Patch('/:id')
   async update(
-    @Req() { user }: CustomRequest,
+    @Req() { user, correlationId }: CustomRequest,
     @Param('id') id: string,
     @Body() updateUnitDto: UpdateUnitDto,
   ) {
@@ -73,13 +75,14 @@ export class UnitsController {
       id,
       user.companyId,
       updateUnitDto,
+      correlationId,
     );
   }
 
   @ApiBearerAuth()
   @ApiOkResponse({ type: Unit })
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.unitsService.remove(id);
+  async remove(@Req() request: CustomRequest, @Param('id') id: string) {
+    return this.unitsService.remove(id, request.correlationId);
   }
 }

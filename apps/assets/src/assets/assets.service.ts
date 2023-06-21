@@ -22,6 +22,7 @@ import {
   AssetCompanyDocument,
 } from '../companies/entities/asset-company.entity';
 import { AssetStatusEnum } from './entities/asset-status.enum';
+import { NestLoggerService } from '@zeowna/logger';
 
 @Injectable()
 export class AssetsService extends AbstractService<
@@ -34,8 +35,9 @@ export class AssetsService extends AbstractService<
     private readonly companyService: AssetCompaniesService,
     private readonly unitService: AssetUnitsService,
     private readonly kafkaProducer: KafkaProducer,
+    private readonly logger: NestLoggerService,
   ) {
-    super(repository);
+    super(repository, logger);
   }
 
   async findAllByOwnerId(
@@ -43,11 +45,25 @@ export class AssetsService extends AbstractService<
     skip = 0,
     limit = 10,
     sort: SortParams = { createdAt: -1 },
+    correlationId: string,
   ) {
+    this.logger.info('AssetsService.findAllByOwnerId()', {
+      ownerId,
+      skip,
+      limit,
+      sort,
+      correlationId,
+    });
     return this.repository.findAllByOwnerId(ownerId, skip, limit, sort);
   }
 
-  async findByIdAndOwnerId(id: string, ownerId: string) {
+  async findByIdAndOwnerId(id: ID, ownerId: string, correlationId: string) {
+    this.logger.info('AssetsService.findByIdAndOwnerId()', {
+      id,
+      ownerId,
+      correlationId,
+    });
+
     const found = await this.repository.findByIdAndOwnerId(id, ownerId);
 
     if (!found) {
@@ -59,9 +75,20 @@ export class AssetsService extends AbstractService<
     return found;
   }
 
-  async create(createAssetDto: CreateAssetDto) {
-    const owner = await this.companyService.findById(createAssetDto.ownerId);
-    const unit = await this.unitService.findById(createAssetDto.unitId);
+  async create(createAssetDto: CreateAssetDto, correlationId: string) {
+    this.logger.info('AssetsService.create()', {
+      createAssetDto,
+      correlationId,
+    });
+
+    const owner = await this.companyService.findById(
+      createAssetDto.ownerId,
+      correlationId,
+    );
+    const unit = await this.unitService.findById(
+      createAssetDto.unitId,
+      correlationId,
+    );
 
     /**
      * @TODO: Move it to a custom Validation if Possible
@@ -82,16 +109,23 @@ export class AssetsService extends AbstractService<
       ? unit
       : new AssetUnit({ id: createAssetDto.unitId } as AssetUnitDocument);
 
-    return super.create(createAssetDto);
+    return super.create(createAssetDto, correlationId);
   }
 
-  async updateAssetCompany(company: PlainCompany) {
+  async updateAssetCompany(company: PlainCompany, correlationId: string) {
+    this.logger.info('AssetService.updateAssetCompany()', {
+      company,
+      correlationId,
+    });
+
     await this.repository.updateAssetCompany(
       new AssetCompany(company as unknown as AssetCompanyDocument),
     );
   }
 
-  async updateAssetUnit(unit: PlainUnitInterface) {
+  async updateAssetUnit(unit: PlainUnitInterface, correlationId: string) {
+    this.logger.info('AssetService.updateAssetUnit()', { unit, correlationId });
+
     await this.repository.updateAssetUnit(
       new AssetUnit({
         ...unit,
@@ -100,33 +134,57 @@ export class AssetsService extends AbstractService<
     );
   }
 
-  private async updateStatus(id: ID, status: AssetStatusEnum) {
-    const found = await this.findById(id);
+  private async updateStatus(
+    id: ID,
+    status: AssetStatusEnum,
+    correlationId: string,
+  ) {
+    this.logger.info('AssetService.updateStatus()', {
+      id,
+      status,
+      correlationId,
+    });
+
+    const found = await this.findById(id, correlationId);
 
     return this.repository.updateStatus(found.id, status);
   }
 
-  private updateStatusByHealthLevel(id: ID, healthLevel: number) {
+  private updateStatusByHealthLevel(
+    id: ID,
+    healthLevel: number,
+    correlationId: string,
+  ) {
+    this.logger.info('AssetService.updateAssetCompany()', { id, healthLevel });
+
     const isAlerting = healthLevel >= 0.75 && healthLevel <= 0.95;
     const isStopped = healthLevel < 0.75;
 
     if (isAlerting) {
-      return this.updateStatus(id, AssetStatusEnum.Alerting);
+      return this.updateStatus(id, AssetStatusEnum.Alerting, correlationId);
     }
 
     if (isStopped) {
-      return this.updateStatus(id, AssetStatusEnum.Stopped);
+      return this.updateStatus(id, AssetStatusEnum.Stopped, correlationId);
     }
 
-    return this.updateStatus(id, AssetStatusEnum.Running);
+    return this.updateStatus(id, AssetStatusEnum.Running, correlationId);
   }
 
   async updateHealthLevel(
     id: string,
     ownerId: string,
     updateAssetHealthLevelDto: UpdateAssetHealthLevelDto,
+    correlationId: string,
   ) {
-    const found = await this.findByIdAndOwnerId(id, ownerId);
+    this.logger.info('AssetService.updateHealthLevel()', {
+      id,
+      ownerId,
+      updateAssetHealthLevelDto,
+      correlationId,
+    });
+
+    const found = await this.findByIdAndOwnerId(id, ownerId, correlationId);
     await this.repository.updateHealthLevel(
       found.id as string,
       updateAssetHealthLevelDto.healthLevel,
@@ -134,6 +192,7 @@ export class AssetsService extends AbstractService<
     const updated = await this.updateStatusByHealthLevel(
       found.id,
       updateAssetHealthLevelDto.healthLevel,
+      correlationId,
     );
 
     await this.kafkaProducer.send({

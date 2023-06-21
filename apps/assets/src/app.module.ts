@@ -7,6 +7,11 @@ import { AssetUnitsModule } from './units/asset-units.module';
 import { AssetCompaniesModule } from './companies/asset-companies.module';
 import { AssetsConsumerModule } from './consumers/assets-consumer.module';
 import { ZeownaLoggerModule } from '@zeowna/logger';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import {
+  GenerateCorrelationIdInterceptor,
+  PresentAbstractEntityInterceptor,
+} from '@zeowna/common';
 
 @Module({
   imports: [
@@ -20,6 +25,10 @@ import { ZeownaLoggerModule } from '@zeowna/logger';
     AssetCompaniesModule,
     AssetUnitsModule,
     AssetsConsumerModule,
+  ],
+  providers: [
+    { provide: APP_INTERCEPTOR, useClass: PresentAbstractEntityInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: GenerateCorrelationIdInterceptor },
   ],
 })
 export class AppModule {}

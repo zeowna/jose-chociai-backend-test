@@ -19,27 +19,34 @@ export class UsersConsumersService {
 
   async companyCreatedConsumer(company: PlainCompany, context: KafkaContext) {
     const topic = context.getTopic();
+    const {
+      headers: { correlationId },
+    } = context.getMessage();
 
     try {
-      this.logger.log(topic, company, 'started');
+      this.logger.log(topic, { correlationId, company });
 
       await this.companiesService.createOrUpdate(
         new UserCompany(company as unknown as UserCompanyDocument),
+        correlationId as string,
       );
-      this.logger.log(topic, company, 'completed');
+      this.logger.log(topic, { correlationId, company });
     } catch (err) {
-      this.logger.error(topic, company, err, 'error');
+      this.logger.error(topic, { correlationId, company, err });
     }
   }
 
   async companyUpdatedConsumer(company: PlainCompany, context: KafkaContext) {
     const topic = context.getTopic();
+    const {
+      headers: { correlationId },
+    } = context.getMessage();
 
     try {
       await this.companyCreatedConsumer(company, context);
       await this.usersService.updateUserCompany(company);
     } catch (err) {
-      this.logger.error(topic, company, err, 'error');
+      this.logger.error(topic, { correlationId, company, err });
     }
   }
 }

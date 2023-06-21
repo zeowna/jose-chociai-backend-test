@@ -9,4 +9,5 @@ export interface DecodedJwt {
 
 export interface CustomRequest extends Request {
   user: DecodedJwt;
+  correlationId: string;
 }
