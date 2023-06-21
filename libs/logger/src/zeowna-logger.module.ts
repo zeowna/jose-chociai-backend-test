@@ -8,7 +8,7 @@ export interface ZeownaLoggerOptions {
 
 @Module({})
 export class ZeownaLoggerModule {
-  static register(options: ZeownaLoggerOptions): DynamicModule {
+  static register(options: ZeownaLoggerOptions = {}): DynamicModule {
     return {
       module: ZeownaLoggerModule,
       providers: [NestLoggerService, ConsoleLoggerService],

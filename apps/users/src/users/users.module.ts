@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { UserMongooseRepository } from './user-mongoose.repository';
+import { UsersMongooseRepository } from './users-mongoose-repository.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.entity';
 import { IsUserEmailAlreadyInUse } from './dto/is-user-email-already-in-use.validation';
@@ -18,7 +18,7 @@ import { IsUserCpfAlreadyInUse } from './dto/is-user-cpf-already-in-use.validati
   controllers: [UsersController],
   providers: [
     UsersService,
-    UserMongooseRepository,
+    UsersMongooseRepository,
     IsUserEmailAlreadyInUse,
     IsUserCpfAlreadyInUse,
   ],

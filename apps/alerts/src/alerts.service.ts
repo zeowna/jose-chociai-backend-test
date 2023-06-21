@@ -28,7 +28,7 @@ export class AlertsService {
         }`,
         asset.owner.id as string,
       );
-      this.logger.log(topic, asset);
+      this.logger.log(topic, { correlationId, asset });
     } catch (err) {
       this.logger.error(topic, { correlationId, asset, err });
     }

@@ -8,16 +8,25 @@ import { PlainCompany } from '@zeowna/entities-definition';
 import { UserCompaniesModule } from '../companies/user-companies.module';
 import { UsersModule } from './users.module';
 import { assertUser, generateCreateUserDto, generateUser } from './test';
+import { ZeownaLoggerModule } from '@zeowna/logger';
+import { ZeownaAuthModule } from '@zeowna/auth';
 
 const MongooseModule = MockedMongooseFactory.useMongoMemoryServer();
 
 describe('UsersService', () => {
+  const correlationId = 'any_string';
   let usersService: UsersService;
   let bcryptHashSpy: jest.SpyInstance;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      imports: [MongooseModule.register(), UsersModule, UserCompaniesModule],
+      imports: [
+        MongooseModule.register(),
+        UsersModule,
+        UserCompaniesModule,
+        ZeownaAuthModule.register({ global: true }),
+        ZeownaLoggerModule.register({ global: true }),
+      ],
     }).compile();
 
     usersService = app.get<UsersService>(UsersService);
@@ -49,6 +58,7 @@ describe('UsersService', () => {
       const email = 'random@email.com';
       const expected = await usersService.create(
         generateCreateUserDto(generateUser({ email })),
+        correlationId,
       );
 
       const result = await usersService.findByEmail(email);
@@ -73,6 +83,7 @@ describe('UsersService', () => {
       const cpf = 'random@cpf.com';
       const expected = await usersService.create(
         generateCreateUserDto(generateUser({ cpf })),
+        correlationId,
       );
 
       const result = await usersService.findByCpf(cpf);
@@ -90,9 +101,9 @@ describe('UsersService', () => {
       const user = generateUser({ password: '123' });
       const createUserDto = generateCreateUserDto(user);
 
-      const result = await usersService.create(createUserDto);
+      const result = await usersService.create(createUserDto, correlationId);
 
-      expect(result).toEqual(generateUser({ ...user, id: result.id }));
+      assertUser(result, generateUser({ ...user, id: result.id }));
       expect(bcryptHashSpy).toBeCalled();
     });
   });
@@ -107,20 +118,24 @@ describe('UsersService', () => {
       const newPassword = '213';
 
       await expect(
-        usersService.updatePassword(id, { newPassword }),
+        usersService.updatePassword(id, { newPassword }, correlationId),
       ).rejects.toThrow(`User not found with id: ${id}`);
     });
 
     it('should resolve the updated User', async () => {
       const user = generateUser();
       const userCreateDto = generateCreateUserDto(user);
-      const created = await usersService.create(userCreateDto);
+      const created = await usersService.create(userCreateDto, correlationId);
 
       const newPassword = '213';
 
-      const result = await usersService.updatePassword(created.id as string, {
-        newPassword,
-      });
+      const result = await usersService.updatePassword(
+        created.id as string,
+        {
+          newPassword,
+        },
+        correlationId,
+      );
 
       assertUser(result, created, true);
       expect(bcryptHashSpy).toBeCalled();
@@ -136,12 +151,13 @@ describe('UsersService', () => {
       const company: PlainCompany = {
         id: new mongoose.Types.ObjectId().toHexString(),
         name: 'Company Name',
+        cnpj: 'any_string',
         createdAt: new Date(),
         updatedAt: new Date(),
         units: [],
       };
 
-      await usersService.updateUserCompany(company);
+      await usersService.updateUserCompany(company, correlationId);
     });
   });
 });

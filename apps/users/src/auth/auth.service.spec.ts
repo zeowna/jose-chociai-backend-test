@@ -7,16 +7,26 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { generateCreateUserDto, generateUser } from '../users/test';
 import { disconnect } from 'mongoose';
+import { ZeownaLoggerModule } from '@zeowna/logger';
+import { ZeownaAuthModule } from '@zeowna/auth';
 
 const MongooseModule = MockedMongooseFactory.useMongoMemoryServer();
 
 describe('AuthService', () => {
+  const correlationId = 'any_string';
   let authService: AuthService;
   let usersService: UsersService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [MongooseModule.register(), JwtModule, UsersModule, HashModule],
+      imports: [
+        MongooseModule.register(),
+        JwtModule,
+        UsersModule,
+        HashModule,
+        ZeownaAuthModule.register({ global: true }),
+        ZeownaLoggerModule.register({ global: true }),
+      ],
       providers: [AuthService],
     }).compile();
 
@@ -40,19 +50,27 @@ describe('AuthService', () => {
 
     it("should reject with Unauthorized if password isn't equal", async () => {
       const createUserDto = generateCreateUserDto(generateUser());
-      await usersService.create(createUserDto);
+      await usersService.create(createUserDto, correlationId);
 
       await expect(
-        authService.signIn(createUserDto.email, 'wrong password'),
+        authService.signIn(
+          createUserDto.email,
+          'wrong password',
+          correlationId,
+        ),
       ).rejects.toThrow("User password doesn't match");
     });
 
     it('should resolve if password is equal', async () => {
       const createUserDto = generateCreateUserDto(generateUser());
-      await usersService.create(createUserDto);
+      await usersService.create(createUserDto, correlationId);
 
       await expect(
-        authService.signIn(createUserDto.email, createUserDto.password),
+        authService.signIn(
+          createUserDto.email,
+          createUserDto.password,
+          correlationId,
+        ),
       ).resolves.not.toThrow();
     });
   });

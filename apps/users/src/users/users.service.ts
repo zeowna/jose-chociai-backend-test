@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AbstractService } from '@zeowna/common';
-import { User } from './entities/user.entity';
-import { UserMongooseRepository } from './user-mongoose.repository';
+import { User, UserDocument } from './entities/user.entity';
+import { UsersMongooseRepository } from './users-mongoose-repository.service';
 import { BcryptHashService } from '../hash/bcrypt-hash.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,27 +21,30 @@ export class UsersService extends AbstractService<
   UpdateUserDto
 > {
   constructor(
-    private readonly repository: UserMongooseRepository,
+    private readonly usersRepository: UsersMongooseRepository,
     private readonly companiesService: UserCompaniesService,
     private readonly hashService: BcryptHashService,
     private readonly logger: NestLoggerService,
   ) {
-    super(repository, logger);
+    super(usersRepository, logger);
   }
 
-  async findByCpf(cpf: string) {
-    this.logger.info('UsersService.findByCpf()', { cpf });
-    return this.repository.findByCpf(cpf);
+  async findByCpf(cpf: string, correlationId?: string) {
+    this.logger.info('UsersService.findByCpf()', { cpf, correlationId });
+    return this.usersRepository.findByCpf(cpf);
   }
 
-  async findByEmail(email: string) {
-    this.logger.info('UsersService.findByEmail()', { email });
-    return this.repository.findByEmail(email);
+  async findByEmail(email: string, correlationId?: string) {
+    this.logger.info('UsersService.findByEmail()', { email, correlationId });
+    return this.usersRepository.findByEmail(email);
   }
 
   async create(createUserDto: CreateUserDto, correlationId: string) {
     this.logger.info(`UsersService.create()`, {
-      createUserDto,
+      createUserDto: {
+        ...createUserDto,
+        password: createUserDto.password ? '<deleted>' : undefined,
+      },
       correlationId,
     });
 
@@ -49,17 +52,17 @@ export class UsersService extends AbstractService<
       createUserDto.companyId,
     );
 
-    this.logger.info('Will attach UserCompany', { createUserDto, company });
-
-    return super.create({
-      ...createUserDto,
-      password: await this.hashService.hashPassword(createUserDto.password),
-      company: company
-        ? company
-        : new UserCompany({
-            id: createUserDto.companyId,
-          } as UserCompanyDocument),
-    });
+    return this.usersRepository.create(
+      new User({
+        ...createUserDto,
+        password: await this.hashService.hashPassword(createUserDto.password),
+        company: company
+          ? company
+          : new UserCompany({
+              id: createUserDto.companyId,
+            } as UserCompanyDocument),
+      } as UserDocument),
+    );
   }
 
   async updatePassword(
@@ -69,13 +72,17 @@ export class UsersService extends AbstractService<
   ) {
     this.logger.info('UsersService.updatePassword()', {
       id,
-      updateUserPasswordDto,
+      updateUserPasswordDto: {
+        newPassword: updateUserPasswordDto.newPassword
+          ? '<deleted>'
+          : undefined,
+      },
       correlationId,
     });
 
-    const existing = await super.findById(id);
+    const existing = await super.findById(id, correlationId);
 
-    return this.repository.updatePassword(
+    return this.usersRepository.updatePassword(
       existing.id as string,
       await this.hashService.hashPassword(updateUserPasswordDto.newPassword),
     );
@@ -87,6 +94,6 @@ export class UsersService extends AbstractService<
       correlationId,
     });
 
-    return this.repository.updateUserCompany(company);
+    return this.usersRepository.updateUserCompany(company);
   }
 }

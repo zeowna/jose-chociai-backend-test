@@ -8,14 +8,22 @@ import {
   UserCompany,
   UserCompanyDocument,
 } from './entities/user-company.entity';
+import { ZeownaLoggerModule } from '@zeowna/logger';
+import { ZeownaAuthModule } from '@zeowna/auth';
 
 const MongooseModule = MockedMongooseFactory.useMongoMemoryServer();
 describe('UserCompaniesService', () => {
+  const correlationId = 'any_string';
   let userCompaniesService: UserCompaniesService;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      imports: [MongooseModule.register(), UserCompaniesModule],
+      imports: [
+        MongooseModule.register(),
+        UserCompaniesModule,
+        ZeownaAuthModule.register({ global: true }),
+        ZeownaLoggerModule.register({ global: true }),
+      ],
     }).compile();
 
     userCompaniesService = app.get<UserCompaniesService>(UserCompaniesService);
@@ -46,6 +54,7 @@ describe('UserCompaniesService', () => {
           id: new mongoose.Types.ObjectId().toHexString(),
           name: 'CompanyName',
         } as UserCompanyDocument),
+        correlationId,
       );
       await expect(userCompaniesService.findById(expected.id)).resolves.toEqual(
         expected,

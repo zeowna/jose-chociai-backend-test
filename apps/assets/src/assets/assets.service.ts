@@ -201,6 +201,7 @@ export class AssetsService extends AbstractService<
         {
           key: TopicsEnum.AssetHealthLevelUpdated,
           value: JSON.stringify(updated.present()),
+          headers: { correlationId },
         },
       ],
     });

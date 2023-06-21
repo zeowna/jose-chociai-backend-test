@@ -44,7 +44,10 @@ export class UsersConsumersService {
 
     try {
       await this.companyCreatedConsumer(company, context);
-      await this.usersService.updateUserCompany(company);
+      await this.usersService.updateUserCompany(
+        company,
+        correlationId as string,
+      );
     } catch (err) {
       this.logger.error(topic, { correlationId, company, err });
     }

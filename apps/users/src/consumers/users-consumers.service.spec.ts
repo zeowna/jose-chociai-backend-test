@@ -1,18 +1,21 @@
 import { UsersConsumersService } from './users-consumers.service';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { UsersService } from '../users/users.service';
 import { PlainCompany } from '@zeowna/entities-definition';
-import mongoose from 'mongoose';
+import mongoose, { disconnect } from 'mongoose';
 import { UserCompaniesService } from '../companies/user-companies.service';
 import { TopicsEnum } from '@zeowna/kafka';
 import { UserCompaniesModule } from '../companies/user-companies.module';
-import { MockedMongooseModule } from '@zeowna/mongoose';
+import { MockedMongooseFactory } from '@zeowna/mongoose';
 import { UsersModule } from '../users/users.module';
 import { UsersConsumersModule } from './users-consumers.module';
+import { ZeownaLoggerModule } from '@zeowna/logger';
+import { ZeownaAuthModule } from '@zeowna/auth';
+
+const MockedMongooseModule = MockedMongooseFactory.useMongoMemoryServer();
 
 describe('UsersConsumersService', () => {
-  let mongod: MongoMemoryServer;
+  const correlationId = 'any_string';
   let usersConsumersService: UsersConsumersService;
   let companiesCreateOrUpdateSpy: jest.SpyInstance;
   let updateUserCompanySpy: jest.SpyInstance;
@@ -20,10 +23,12 @@ describe('UsersConsumersService', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       imports: [
-        MockedMongooseModule(mongod),
+        MockedMongooseModule.register(),
         UsersConsumersModule,
         UsersModule,
         UserCompaniesModule,
+        ZeownaAuthModule.register({ global: true }),
+        ZeownaLoggerModule.register({ global: true }),
       ],
     }).compile();
 
@@ -41,9 +46,8 @@ describe('UsersConsumersService', () => {
   });
 
   afterEach(async () => {
-    if (mongod) {
-      await mongod.stop();
-    }
+    await disconnect();
+    await MockedMongooseModule.disconnect();
   });
 
   describe('companyCreatedConsumer()', () => {
@@ -55,6 +59,7 @@ describe('UsersConsumersService', () => {
       const company: PlainCompany = {
         id: new mongoose.Types.ObjectId().toHexString(),
         name: 'Company Name',
+        cnpj: 'any_string',
         createdAt: new Date(),
         updatedAt: new Date(),
         units: [],
@@ -62,6 +67,11 @@ describe('UsersConsumersService', () => {
 
       const context = {
         getTopic: () => TopicsEnum.CompanyCreated,
+        getMessage: () => ({
+          headers: {
+            correlationId,
+          },
+        }),
       };
 
       await usersConsumersService.companyUpdatedConsumer(
@@ -89,6 +99,7 @@ describe('UsersConsumersService', () => {
 
       const context = {
         getTopic: () => TopicsEnum.CompanyCreated,
+        getMessage: () => ({ headers: { correlationId } }),
       };
 
       await usersConsumersService.companyUpdatedConsumer(

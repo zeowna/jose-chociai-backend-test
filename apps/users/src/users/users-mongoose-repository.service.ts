@@ -6,7 +6,7 @@ import { PlainCompany } from '@zeowna/entities-definition';
 import { AbstractMongooseRepository } from '@zeowna/mongoose';
 
 @Injectable()
-export class UserMongooseRepository extends AbstractMongooseRepository<User> {
+export class UsersMongooseRepository extends AbstractMongooseRepository<User> {
   constructor(
     @InjectModel(User.name) private readonly repository: Model<User>,
   ) {

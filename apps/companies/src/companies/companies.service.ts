@@ -66,6 +66,7 @@ export class CompaniesService extends AbstractService<
         {
           key: TopicsEnum.CompanyUpdated,
           value: JSON.stringify(updated.present()),
+          headers: { correlationId },
         },
       ],
     });
@@ -111,10 +112,9 @@ export class CompaniesService extends AbstractService<
     );
   }
 
-  async findByCnpj(cnpj: string, correlationId: string) {
+  async findByCnpj(cnpj: string) {
     this.logger.info('CompaniesService.findByCnpj()', {
       cnpj,
-      correlationId,
     });
 
     return this.companiesRepository.findByCnpj(cnpj);

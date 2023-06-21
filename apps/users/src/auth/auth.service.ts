@@ -6,6 +6,7 @@ import { BcryptHashService } from '../hash/bcrypt-hash.service';
 import { AbstractAuthService } from '@zeowna/auth';
 import { DecodedJwt } from '@zeowna/common';
 import { SignInResponse } from './types/sign-in.response';
+import { NestLoggerService } from '@zeowna/logger';
 
 @Injectable()
 export class AuthService extends AbstractAuthService {
@@ -13,12 +14,18 @@ export class AuthService extends AbstractAuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly hashService: BcryptHashService,
+    private readonly logger: NestLoggerService,
   ) {
-    super(jwtService, hashService);
+    super(jwtService);
   }
 
-  async signIn(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email);
+  async signIn(email: string, password: string, correlationId: string) {
+    this.logger.info('AuthService.signIn()', {
+      email,
+      password: password ? '<deleted>' : undefined,
+      correlationId,
+    });
+    const user = await this.usersService.findByEmail(email, correlationId);
 
     const isEqual = await this.hashService.comparePasswords(
       user.password,

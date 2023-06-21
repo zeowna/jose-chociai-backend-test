@@ -109,7 +109,7 @@ Reusable things for authentication and authorization
 
 Provides POJO Entities typings
 
-- PlainEntity and etc.
+- PlainEntity etc.
 
 ## Apps
 
@@ -161,5 +161,6 @@ Provides Kafka Consumer.
 
 - More Test Coverage;
 - Asset Image upload;
-- A Auth Service outside Users service (Role Based);
+- Soft Delete;
+- An Auth Service outside Users service (Role Based);
 - A Redis Cache to Store Auth Tokens and Expirations.

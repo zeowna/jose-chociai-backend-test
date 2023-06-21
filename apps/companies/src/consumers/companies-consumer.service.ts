@@ -27,6 +27,7 @@ export class CompaniesConsumerService {
       this.logger.log(topic, { correlationId, unit });
       await this.unitsService.createOrUpdate(
         new CompanyUnit(unit as unknown as CompanyUnitDocument),
+        correlationId as string,
       );
       await this.companiesService.updateCompanyUnits(
         unit,

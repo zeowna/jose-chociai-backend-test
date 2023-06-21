@@ -9,6 +9,7 @@ export class MockedRepository implements RepositoryInterface<MockedEntity> {
     .fill(null)
     .map((_, index) => generateMockedEntityFunction(`${index + 1}`));
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async findAll(skip: number, limit: number, sort: SortParams) {
     return this.data;
   }

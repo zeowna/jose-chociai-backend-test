@@ -33,6 +33,7 @@ export class AssetsConsumersService {
       this.logger.log(topic, { correlationId, company });
       await this.companiesService.createOrUpdate(
         new AssetCompany(company as unknown as AssetCompanyDocument),
+        correlationId as string,
       );
       this.logger.log(topic, { correlationId, company });
     } catch (err) {
@@ -71,6 +72,7 @@ export class AssetsConsumersService {
           ...unit,
           companyId: unit.company.id as string,
         } as unknown as AssetUnitDocument),
+        correlationId as string,
       );
       this.logger.log(topic, { correlationId, unit });
     } catch (err) {
@@ -86,7 +88,7 @@ export class AssetsConsumersService {
 
     try {
       await this.unitCreatedConsumer(unit, context);
-      await this.assetsService.updateAssetUnit(unit);
+      await this.assetsService.updateAssetUnit(unit, correlationId as string);
     } catch (err) {
       this.logger.error(topic, { correlationId, unit, err });
     }
